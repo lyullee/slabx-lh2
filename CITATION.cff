@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+title: slabx-lh2
+message: >-
+  If you use this software, please cite both it and the SLAB model it extends.
+type: software
+authors:
+  - family-names: Lee
+    given-names: Ugwiyeon
+    email: lyullee@kgs.or.kr
+    affiliation: Korea Gas Safety Corporation
+repository-code: "https://github.com/lyullee/slabx-lh2"
+license: MIT
+version: 0.1.0
+abstract: >-
+  Liquid hydrogen extensions to the SLAB dense-gas dispersion model, with a
+  criterion that says when the downwind-marching formulation may be used. Two
+  corrections carry no free parameters: water saturation below the triple
+  point, where the stock treatment is wrong by a factor of 3900 at 200 K, and
+  a partial coupling of the cloud width to its rise. The applicability
+  diagnostic reports whether a completed run may be used at all, which the
+  integral models surveyed here do not.
+references:
+  - type: report
+    authors:
+      - family-names: Ermak
+        given-names: Donald L.
+    title: "User's Manual for SLAB: an atmospheric dispersion model for
+      denser-than-air releases"
+    institution:
+      name: Lawrence Livermore National Laboratory
+    number: UCRL-MA-105607
+    year: 1990
+  - type: article
+    authors:
+      - family-names: Wagner
+        given-names: W.
+      - family-names: Riethmann
+        given-names: T.
+      - family-names: Feistel
+        given-names: R.
+      - family-names: Harvey
+        given-names: A. H.
+    title: "New equations for the sublimation pressure and melting pressure
+      of H2O ice Ih"
+    journal: Journal of Physical and Chemical Reference Data
+    volume: 40
+    year: 2011
+    start: 043103
