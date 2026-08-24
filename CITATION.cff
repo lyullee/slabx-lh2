@@ -11,6 +11,11 @@ authors:
 repository-code: "https://github.com/lyullee/slabx-lh2"
 license: MIT
 version: 0.1.1
+doi: 10.5281/zenodo.22075011
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22082276
+    description: The version of record for this release
 abstract: >-
   Liquid hydrogen extensions to the SLAB dense-gas dispersion model, with a
   criterion that says when the downwind-marching formulation may be used. Two
