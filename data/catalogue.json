@@ -387,14 +387,34 @@
       "note": ""
     },
     {
-      "key": "rise.P_W1_pass",
+      "key": "rise.P_W1_pass.width_only",
+      "value": 0,
+      "unit": "of 4",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "NASA, width coupling and water correction",
+      "doc": "27, 31",
+      "note": "`results.json` -> prereg_plume_width.P_W1_pass_width_only"
+    },
+    {
+      "key": "rise.P_W1_pass.with_drag",
       "value": 1,
       "unit": "of 4",
       "grade": "A",
       "kind": "comparison",
-      "source": "NASA, both corrections, corrected aspect ratio",
+      "source": "NASA, plus the exploratory vertical drag",
       "doc": "31",
-      "note": "was 0/4 before the correction; the earlier 'within half a per cent' was a factor-of-two error"
+      "note": "`results.json` -> prereg_plume_width.P_W1_pass_with_drag. **Neither is recorded as a pass**: the outcome is dominated by the pool radius, which the NASA paper does not report. docs/35 section 35.3"
+    },
+    {
+      "key": "e34.ground_origin_effect",
+      "value": "4.52 to 1.18",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "conduction ratio, per-fill peak vs surface reaching 20 K",
+      "doc": "29",
+      "note": "the time origin has to be when the ground first went cold, not when each fill peaked"
     },
     {
       "key": "rise.exponent.withdrawn_0869",
@@ -777,14 +797,24 @@
       "note": "derived and evaluated on the same six trials; **not independently validated**"
     },
     {
-      "key": "lfl.phmsa_lng_factor",
+      "key": "lfl.phmsa_lng_factor.withdrawn",
       "value": 2.5,
       "unit": "-",
       "grade": "-",
+      "kind": "withdrawn",
+      "source": "misread of 49 CFR 193.2059(b)(1)",
+      "doc": "43",
+      "note": "**withdrawn.** The regulation's 2.5 is an *average gas concentration in air of 2.5 percent*, the dispersion endpoint, not a distance multiplier. There is no regulatory distance factor to compare SAFETY_FACTOR against"
+    },
+    {
+      "key": "regulatory.lng_endpoint_concentration",
+      "value": 2.5,
+      "unit": "vol %",
+      "grade": "-",
       "kind": "measurement",
-      "source": "PHMSA, LNG in stable low wind",
-      "doc": "24",
-      "note": "for comparison"
+      "source": "49 CFR 193.2059(b)(1)",
+      "doc": "43",
+      "note": "the LNG dispersion endpoint; the same section sets F stability, 2.01 m/s at 10 m, RH 50 %, receptor height 0.5 m and roughness 0.03 m"
     },
     {
       "key": "lfl.grid_independence",
@@ -1067,5 +1097,5 @@
       "note": "unusable"
     }
   ],
-  "note": "20 records were removed from the public release: values measured by others and reported in their publications. See data/SOURCES.md. Model outputs, internal comparisons, diagnostics and withdrawn values are all retained."
+  "note": "21 records were removed from the public release: values measured by others and reported in their publications. See data/SOURCES.md. Model outputs, internal comparisons, diagnostics and withdrawn values are all retained."
 }

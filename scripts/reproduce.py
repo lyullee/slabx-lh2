@@ -40,6 +40,7 @@ from slabx_lh2.diagnostics import briggs_liftoff, critical_wind, premise_summary
 from slabx_lh2.lfl import (SAFETY_FACTOR, brackets_from_arcs,
                            flammable_distance, verdict)
 from slabx_lh2.plume_width import plume_width_coupling
+from slabx_lh2.vertical_drag import vertical_drag
 from slabx_lh2.air_condensation import condensation_onset
 from slabx_lh2.diagnostics import (CRITICAL_WIND_FIT, CRITICAL_WIND_RANGE_KGS,
                                    rise_scaling)
@@ -196,15 +197,32 @@ def section_briggs():
 
 
 def section_lfl():
-    print("\n== LFL distance against the measured bracket ==")
+    """
+    The model's distance, and the measured bracket where it is installed.
+
+    The distance is a model output and always prints. The bracket is a
+    measurement and is not distributed; where it is missing the verdict
+    column says so rather than the section failing.
+    """
+    have = any(v[6] is not None for v in FFI.values())
+    print("\n== LFL distance"
+          + (" against the measured bracket ==" if have
+             else " (measured brackets not installed) =="))
     print(f"{'trial':>6}{'measured':>16}{'model':>9}{'x1.25':>9}   verdict")
     for t in sorted(FFI):
         atm, traj, dur, win = _ffi(t)
-        lo, hi = brackets_from_arcs(ARCS, FFI[t][6])
         d = flammable_distance(traj, atm, t_avg=win, t_release=float(dur))
+        if FFI[t][6] is None:
+            print(f"{t:>6}{'not installed':>16}{d['raw']:>9.1f}"
+                  f"{d['factored']:>9.1f}   -")
+            continue
+        lo, hi = brackets_from_arcs(ARCS, FFI[t][6])
         span = f"{lo:.0f} - {hi:.0f} m" if math.isfinite(hi) else f"> {lo:.0f} m"
         print(f"{t:>6}{span:>16}{d['raw']:>9.1f}{d['factored']:>9.1f}"
               f"   {verdict(d['raw'], (lo, hi))}")
+    if not have:
+        print("   the brackets come from FFI-RAPPORT 20/03101 appendix A; "
+              "see data/SOURCES.md")
 
 
 SECTIONS = {"water": section_water, "dense": section_dense,
@@ -327,18 +345,47 @@ def collect() -> dict:
                                 if isinstance(v, dict))
     out["negative_control_lng_pool"] = lng
 
+    # --- the defect's size on a dense gas, on the path it can reach --------
+    # The published dense-gas validation runs on the legacy water backend,
+    # which extrapolates Antoine below the triple point and was never
+    # clamped, so the correction cannot reach it -- `lng` above is 0 by
+    # construction. Run Burro 8 with the **CoolProp** water backend, which
+    # does clamp, and the correction moves it by more than a tenth.
+    a = Atmosphere(u_ref=1.94, z_ref=3.0, T=290.0, rh=50.0, z0=2e-4,
+                   stability="E")
+    src = dict(rate=116.93, area=116.93 / (116.93 / 657.0), duration=107.0)
+    cp = {}
+    for label, water in (("clamped", coolprop_water()),
+                         ("corrected", with_sublimation(coolprop_water()))):
+        traj, _ = run_dispersion(EvaporatingPool(substance=LNG, **src), a,
+                                 LegacyThermo(LNG), water, x_max=1000.0,
+                                 n_puff_steps=40)
+        f = concentration_field(traj, a, z=1.0, t_avg=80.0, t_release=107.0)
+        cp[label] = f.distance_to(0.05)
+    same = abs(cp["clamped"] - cp["corrected"]) < 1e-9
+    cp["change_pct"] = abs(cp["corrected"] - cp["clamped"]) \
+        / cp["clamped"] * 100.0
+    cp["upstream_already_corrected"] = bool(same)
+    cp["note"] = ("the defect is not specific to hydrogen: Burro 8's cloud "
+                  "runs 208 to 290 K and 25 of 58 trajectory points are "
+                  "below the water triple point. Zero here means the "
+                  "installed slabx has fixed it upstream (1.0.6+), not that "
+                  "the defect was small. docs/42")
+    out["defect_on_dense_gas_coolprop"] = cp
+
     # --- NASA: rise scaling and the residual ------------------------------
     nasa = {}
     for t, (u, ts, Tc, rh) in NASA.items():
         row = {"wind_ms": u, "rate_kgs": 5.7*70.8/ts}
-        for lbl, ice, cpl in (("baseline", False, False),
-                              ("water_only", True, False),
-                              ("width_only", False, True),
-                              ("both", True, True)):
+        for lbl, ice, cpl, drg in (("baseline", False, False, False),
+                                   ("water_only", True, False, False),
+                                   ("width_only", False, True, False),
+                                   ("both", True, True, False),
+                                   ("both_plus_drag", True, True, True)):
             a = Atmosphere(u_ref=u, z_ref=10.0, T=Tc+273.15, rh=rh, z0=3e-3,
                            stability="D")
             wb = with_sublimation(coolprop_water()) if ice else coolprop_water()
-            with plume_width_coupling(cpl):
+            with plume_width_coupling(cpl), vertical_drag(drg):
                 traj, _ = run_dispersion(
                     EvaporatingPool(substance=H2, rate=5.7*70.8/ts,
                                     area=math.pi*4.55**2, duration=float(ts)),
@@ -357,12 +404,30 @@ def collect() -> dict:
     out["nasa"] = nasa
     out["prereg_plume_width"] = {
         "P_W1_band": [0.6, 0.9],
-        "P_W1_pass": sum(1 for v in nasa.values()
-                         if 0.6 <= v["exponent_both"] <= 0.9),
+        # the registration's prediction is evaluated with the width coupling
+        # alone and with the exploratory drag as well; both are reported
+        # because the two answers differ and the paper must say which is
+        # which. docs/31, prereg ADDENDUM 3.
+        "P_W1_pass_width_only": sum(1 for v in nasa.values()
+                                    if 0.6 <= v["exponent_both"] <= 0.9),
+        "P_W1_pass_with_drag": sum(1 for v in nasa.values()
+                                   if 0.6 <= v["exponent_both_plus_drag"]
+                                   <= 0.9),
         "P_W2_band": [0.5, 2.0],
         "P_W2_pass": sum(1 for v in nasa.values()
                          if 0.5 <= v["width_ratio"] <= 2.0),
-        "n_trials": len(nasa)}
+        "n_trials": len(nasa),
+        # the scaling decomposition is measured on `both`, so the residual
+        # is checked against `both`. Mixing the two configurations was an
+        # error caught in review.
+        "residual_errors_pct": sorted(
+            abs(v["exponent_predicted"] / v["exponent_both"] - 1) * 100
+            for v in nasa.values()),
+        "note": "the width coupling alone reaches the band on none of the "
+                "four; with the exploratory drag, on one. Neither is "
+                "recorded as a pass: the outcome is dominated by the pool "
+                "radius, which the original NASA paper does not report. "
+                "docs/35 section 35.3"}
 
     # --- ground conduction against PRESLHY E3.4 Table 3 --------------------
     sub = substrate("concrete_cryogenic")
@@ -524,30 +589,25 @@ def _e35_briggs():
              10: "3.5.10", 11: "3.5.11", 12: "3.5.12", 13: "3.5.17",
              14: "3.5.16", 16: "3.5.4", 17: "3.5.5", 19: "3.5.4",
              20: "3.5.5", 22: "3.5.13", 23: "3.5.14", 24: "3.5.15"}
-    path = _Path(__file__).resolve().parent.parent / "data" / \
-        "lh2_e35_conditions_v2.csv"
-    if not path.exists():
-        return {"note": f"{path.name} not found; skipped"}
+    # conditions from `slabx_lh2.trials`, which ships with the package
+    from slabx_lh2.trials import E35
     rows, lp, u_v, q_v = {}, [], [], []
-    for r in csv.DictReader(path.open(encoding="utf-8")):
-        t = int(r["trial"])
-        if t not in trial or not r["wind_mean_ms"]:
-            continue
-        ori, hgt, d, bar = tests[trial[t]]
-        q = flow.get((d, bar))
-        if q is None:
-            continue
-        u = float(r["wind_mean_ms"])
-        atm = Atmosphere(u_ref=u, z_ref=1.5, T=float(r["T_mean_C"]) + 273.15,
-                         rh=float(r["RH_mean_pct"]), z0=0.01, stability="D")
+    for t, tr in sorted(E35.items()):
+        ori = {"horizontal": "h", "vertical up": "u",
+               "vertical down": "d"}[tr.orientation]
+        bar = 5 if "5 barg" in tr.note else 1
+        q, u = tr.rate_kg_s, tr.wind_m_s
+        atm = Atmosphere(u_ref=u, z_ref=tr.wind_ref_height_m,
+                         T=tr.temperature_C + 273.15, rh=tr.humidity_pct,
+                         z0=tr.roughness_m, stability=tr.stability)
         if ori == "d":
             src = EvaporatingPool(substance=H2, rate=q, duration=120.0,
-                                  area=math.pi * (1.2 if t == 13 else 0.7) ** 2)
+                                  area=math.pi * tr.pool_radius_m ** 2)
         else:
             src = HorizontalJet(substance=H2, rate=q, duration=120.0,
-                                area=math.pi * (d / 1000.0) ** 2 / 4,
+                                area=tr.area_m2,
                                 liquid_fraction=1.0 - _flash(bar),
-                                height=hgt, T_source=20.37)
+                                height=tr.release_height_m, T_source=20.37)
         with plume_width_coupling():
             traj, _ = run_dispersion(
                 src, atm, CoolPropThermo(H2, fluid="Hydrogen"),

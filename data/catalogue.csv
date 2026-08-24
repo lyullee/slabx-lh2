@@ -37,7 +37,9 @@ rise.exponent.width_only,1.07,-,A,model,"NASA Test 6, width coupling",27,range 1
 rise.exponent.both,1.05,-,A,model,"NASA Test 6, width coupling and drag",31,range 0.86 to 1.30 after the aspect-ratio correction
 rise.exponent.briggs,0.667,-,-,measurement,Briggs bent-over plume,22,the target
 rise.exponent.registered_band,0.6 to 0.9,-,-,model,PREREG_lh2_plume_width P-W1,prereg,
-rise.P_W1_pass,1,of 4,A,comparison,"NASA, both corrections, corrected aspect ratio",31,was 0/4 before the correction; the earlier 'within half a per cent' was a factor-of-two error
+rise.P_W1_pass.width_only,0,of 4,A,comparison,"NASA, width coupling and water correction","27, 31",`results.json` -> prereg_plume_width.P_W1_pass_width_only
+rise.P_W1_pass.with_drag,1,of 4,A,comparison,"NASA, plus the exploratory vertical drag",31,"`results.json` -> prereg_plume_width.P_W1_pass_with_drag. **Neither is recorded as a pass**: the outcome is dominated by the pool radius, which the NASA paper does not report. docs/35 section 35.3"
+e34.ground_origin_effect,4.52 to 1.18,-,A,diagnostic,"conduction ratio, per-fill peak vs surface reaching 20 K",29,"the time origin has to be when the ground first went cold, not when each fill peaked"
 rise.exponent.withdrawn_0869,0.869,-,-,withdrawn,NASA Test 6 before the water correction,27,"the original P-W1 pass; withdrawn, the water fix moves it to 1.047"
 rise.residual.dlnB_dlnz,0.39 to 0.59,-,A,diagnostic,"NASA four trials, both corrections",27,Briggs needs 1.0; the width is coupled only partway
 rise.residual.dlnh_dlnz,0.23 to 0.49,-,A,diagnostic,NASA four trials,27,Briggs needs 1.0; **the depth is not coupled to the rise at all**
@@ -76,7 +78,8 @@ lfl.in_bracket,5,of 6,B,comparison,"FFI arcs at 30, 50 and 100 m","24, 27",
 lfl.safety_factor_required,1.114,-,B,comparison,the six FFI trials,27,"REPLACES 1.23, which came from the un-interpolated grid"
 lfl.safety_factor_required.withdrawn,1.23,-,-,withdrawn,before the crossing was interpolated,27,"replaced by 1.114. slabx integrates on a geometric grid and the distance was read at the last node above the limit rather than at the interpolated crossing, which made four trials return an identical 40.75 m"
 lfl.safety_factor_adopted,1.25,-,-,model,rounded engineering margin,26,derived and evaluated on the same six trials; **not independently validated**
-lfl.phmsa_lng_factor,2.5,-,-,measurement,"PHMSA, LNG in stable low wind",24,for comparison
+lfl.phmsa_lng_factor.withdrawn,2.5,-,-,withdrawn,misread of 49 CFR 193.2059(b)(1),43,"**withdrawn.** The regulation's 2.5 is an *average gas concentration in air of 2.5 percent*, the dispersion endpoint, not a distance multiplier. There is no regulatory distance factor to compare SAFETY_FACTOR against"
+regulatory.lng_endpoint_concentration,2.5,vol %,-,measurement,49 CFR 193.2059(b)(1),43,"the LNG dispersion endpoint; the same section sets F stability, 2.01 m/s at 10 m, RH 50 %, receptor height 0.5 m and roughness 0.03 m"
 lfl.grid_independence,0.001,fraction,A,model,x_max from 120 to 1200 m,27,"after interpolation; before it, four trials returned an identical 40.75 m because the geometric grid is shared"
 lfl.humidity_insensitivity,1.3,-,A,model,"RH 60, 75 and 90 %",27,the ratio of the largest to the smallest LFL distance; the arc concentrations move by an order of magnitude over the same sweep
 air.onset.N2,90.27,mol%,A,model,adiabatic mix with sublimation below the triple points,30,

@@ -29,8 +29,12 @@ at 10 and 14 m with sensors that saturate at 4 vol%, and NASA reports cloud
 heights rather than distances.  Say "sufficient for the six trials
 considered", not "validated".
 
-For comparison, PHMSA mandates 2.5 for LNG dispersion in stable, low-wind
-conditions.
+**There is no regulatory factor to compare this against.** An earlier
+draft of this work cited "PHMSA's 2.5 for LNG"; that is wrong. 49 CFR
+193.2059(b)(1) sets an *average gas concentration in air of 2.5 percent* as
+the dispersion endpoint, which is a concentration and not a distance
+multiplier. The two have different dimensions and the comparison has been
+withdrawn.
 
 Before using the distance, check `slabx_lh2.diagnostics.premise_summary`: below
 `critical_wind(rate)` the marching formulation is outside its own premise and

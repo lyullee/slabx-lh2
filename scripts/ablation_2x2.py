@@ -120,12 +120,19 @@ def run_ffi(trial, ice, coupling):
                  coupling)
     d = flammable_distance(traj, atm, t_avg=win, t_release=float(dur),
                            safety_factor=1.0)
-    lo, hi = brackets_from_arcs(ARCS, obs)
+    # the bracket is a measurement and is not distributed; the model output
+    # is unaffected and still recorded, with an empty verdict
+    if obs is None:
+        lo, hi, v = "", "", "no measurement installed"
+    else:
+        lo, hi = brackets_from_arcs(ARCS, obs)
+        v = verdict(d["raw"], (lo, hi))
+        hi = None if math.isinf(hi) else hi
     app = applicability(traj)
     zc, h, b = _shape(traj)
     return dict(lfl_m=d["raw"], observed_lower_m=lo,
-                observed_upper_m=(None if math.isinf(hi) else hi),
-                bracket_verdict=verdict(d["raw"], (lo, hi)),
+                observed_upper_m=hi if hi is not None else "",
+                bracket_verdict=v,
                 premise_ratio_max=app["premise_ratio"],
                 max_centerline_height_m=zc, max_half_depth_m=h * 0.5,
                 max_half_width_m=b, rise_exponent_fit="",
@@ -255,10 +262,14 @@ def main() -> int:
                      and x["water_correction"] == ice
                      and x["width_coupling"] == cpl)
             cells.append(r["lfl_m"])
-        lo = rows[0] and next(x for x in rows if x["case_id"] == f"test{t}")
-        span = (f"{lo['observed_lower_m']:.0f} - "
-                f"{lo['observed_upper_m']:.0f}" if lo["observed_upper_m"]
-                else f"> {lo['observed_lower_m']:.0f}")
+        r0 = next(x for x in rows if x["case_id"] == f"test{t}")
+        if r0["observed_lower_m"] == "":
+            span = "not installed"
+        elif r0["observed_upper_m"]:
+            span = (f"{r0['observed_lower_m']:.0f} - "
+                    f"{r0['observed_upper_m']:.0f}")
+        else:
+            span = f"> {r0['observed_lower_m']:.0f}"
         print(f"{t:>6}" + "".join(f"{c:>10.2f}" for c in cells)
               + f"{span:>14}")
 

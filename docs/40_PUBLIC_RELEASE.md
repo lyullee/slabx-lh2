@@ -157,7 +157,7 @@ observations = pytest.importorskip(
 6. 공개본 트리 생성 → GitHub → PyPI → Zenodo
 7. **비공개본은 별도 저장소**(private) 또는 로컬 보관
 
-**5번이 까다롭습니다** — 목록 123건 중 관측 파생이 어느 것인지 이미
+**5번이 까다롭습니다** — 목록에서 관측 파생이 어느 것인지 이미
 `kind` 와 `grade` 로 구분돼 있으니 필터가 됩니다.
 
 ---

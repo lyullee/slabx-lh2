@@ -177,8 +177,179 @@ def test_the_generated_numbers_still_match_the_headline_claims():
         assert ratio == pytest.approx(1.0, abs=0.05)
     else:
         assert ratio > 1000
-    assert d["prereg_plume_width"]["P_W1_pass"] == 0
+    pw = d["prereg_plume_width"]
+    assert pw["P_W1_pass_width_only"] == 0
+    assert pw["P_W1_pass_with_drag"] == 1
+    assert max(pw["residual_errors_pct"]) < 6.0
     assert d["briggs_e35"]["rank_corr_Lp_wind"] < -0.7
     assert not d["air_condensation"]["N2"]["inside_flammable_range"]
     a, b = (d["critical_wind"]["coefficients"]["D"][k] for k in ("a", "b"))
     assert 2.6 < a < 2.8 and 0.12 < b < 0.15
+
+
+#: Every script a reader might run, with the arguments that make them cheap.
+#: `benchmark_runtime` and `ablation_2x2` are slow, so they get the smallest
+#: settings that still exercise the code path.
+PUBLIC_SCRIPTS = [
+    ("reproduce.py", ["--json"]),
+    ("applicability_all.py", []),
+    ("figure_applicability.py", []),
+    ("rr986_ground.py", []),
+    ("effects_comparison.py", []),
+    ("ablation_2x2.py", []),
+    ("benchmark_runtime.py", ["--repeats", "2", "--batch-repeats", "1",
+                              "--skip-cold"]),
+]
+
+
+@pytest.mark.slow
+@pytest.mark.parametrize("script,args", PUBLIC_SCRIPTS,
+                         ids=[s for s, _ in PUBLIC_SCRIPTS])
+def test_every_script_runs_without_the_measurements(script, args):
+    """
+    A public install has the conditions and not the measurements, and the
+    documentation says every model output still reproduces.
+
+    **Two scripts did not, and both failed the same way** -- the code that
+    assembled the results handled a missing bracket and the code that printed
+    it did not. `reproduce.py` was caught in review; `ablation_2x2.py` only
+    when this test was widened from one script to all of them.
+    """
+    import os
+    env = dict(os.environ, SLABX_LH2_DATA="/nonexistent-on-purpose",
+               MPLBACKEND="Agg")
+    p = subprocess.run([sys.executable, str(ROOT / "scripts" / script),
+                        *args], cwd=ROOT, env=env, capture_output=True,
+                       text=True, timeout=1800)
+    assert p.returncode == 0, (
+        f"scripts/{script} failed without the measurements:\n"
+        f"{p.stderr[-1500:]}")
+
+
+def _catalogue_is_filtered() -> bool:
+    import json as _j
+    p = ROOT / "data" / "catalogue.json"
+    return p.exists() and bool(_j.loads(p.read_text(encoding="utf-8"))
+                               .get("note"))
+
+
+@pytest.mark.slow
+def test_build_dataset_refuses_to_regenerate_a_filtered_catalogue():
+    """
+    In the public release `data/catalogue.json` is the filtered copy, with
+    the measured records removed. Regenerating it there would silently put
+    them back, so `build_dataset.py` refuses and says why.
+
+    **This is the one script that should fail in the public tree**, which is
+    why it is not in `PUBLIC_SCRIPTS`: a script that exits non-zero on
+    purpose and one that crashes look the same to a loop over return codes.
+    """
+    import os
+    env = dict(os.environ, SLABX_LH2_DATA="/nonexistent-on-purpose")
+    p = subprocess.run([sys.executable,
+                        str(ROOT / "scripts" / "build_dataset.py")],
+                       cwd=ROOT, env=env, capture_output=True, text=True,
+                       timeout=600)
+    if _catalogue_is_filtered():
+        assert p.returncode != 0
+        assert "filtered copy" in (p.stdout + p.stderr), (
+            "it refused, but without saying why")
+    else:
+        assert p.returncode == 0, p.stderr[-800:]
+
+
+@pytest.mark.slow
+def test_reproduce_completes_without_the_measurements():
+    """
+    The public claim is that a fresh install reproduces every model output
+    and skips only the comparisons against measurement.
+
+    **That was false until this test existed.** `collect()` handled the
+    missing brackets and the printed sections did not, so
+    `reproduce.py --json` died with a TypeError on a public install while
+    the documentation said it would not.
+    """
+    import os
+    env = dict(os.environ, SLABX_LH2_DATA="/nonexistent-on-purpose")
+    p = subprocess.run([sys.executable, str(ROOT / "scripts" /
+                                            "reproduce.py"), "--json"],
+                       cwd=ROOT, env=env, capture_output=True, text=True)
+    assert p.returncode == 0, (
+        f"reproduce.py failed without the measurements:\n"
+        f"{p.stderr[-1500:]}")
+    out = p.stdout
+    assert "not installed" in out, (
+        "the LFL section should say the brackets are missing, not omit them")
+    assert "3900" in out or "3.900" in out or "1.0" in out, \
+        "the water section should still print"
+    d = json.loads((ROOT / "results" / "results.json").read_text())
+    assert d["measurements_installed"] is False
+    assert d["safety_factor_required"] is None
+    # the model outputs are all still there
+    assert d["ffi"]["4"]["lfl_model_m"] > 0
+    assert "critical_wind" in d and "nasa" in d
+
+
+class TestCountsAreNotHardCoded:
+    """
+    Counts that change whenever anything is added must not be written into
+    prose.
+
+    Test totals, catalogue sizes and file counts were written into six
+    documents and went stale in six different places. **A number nobody
+    recomputes is a number that will be wrong**, and unlike a physical
+    result there is nothing to check it against.
+    """
+
+    #: (pattern, what to do instead)
+    VOLATILE = {
+        r"목록 \d{2,3}건": "let build_dataset.py print it",
+        r"catalogue\.csv +\d{2,3}건": "let build_dataset.py print it",
+        r"\*\*\d{3} 통과(, \d+ skip)?\*\*": "say 'all pass' and let pytest count",
+        r"\*\*\d{2,3}개\*\* *\|": "let make_public.py print it",
+    }
+
+    @pytest.mark.parametrize("pattern,advice", list(VOLATILE.items()))
+    def test_volatile_counts_are_absent(self, pattern, advice):
+        bad = []
+        for p in LIVE_DOCS:
+            for n, line in enumerate(p.read_text(encoding="utf-8")
+                                     .splitlines(), 1):
+                if re.search(pattern, line):
+                    if any(m in line for m in RETRACTION_MARKERS):
+                        continue
+                    bad.append(f"  {p.relative_to(ROOT)}:{n}: {line.strip()}")
+        assert not bad, "\n".join(
+            [f"hard-coded count matching {pattern!r}; {advice}"] + bad)
+
+
+class TestExternalDocumentReferences:
+    """
+    Documents 01 to 17 belong to the upstream dense-gas validation and are
+    not in this repository. A reader who follows a reference and finds
+    nothing has been misled, so the three documents that cite them carry a
+    note saying where they live.
+    """
+
+    CITING = ["18_LH2_APPLICABILITY.md", "22_BENTOVER_PREMISE.md",
+              "24_LH2_SUMMARY.md"]
+
+    @pytest.mark.parametrize("name", CITING)
+    def test_they_say_the_referenced_documents_are_elsewhere(self, name):
+        p = ROOT / "docs" / name
+        if not p.exists():
+            pytest.skip(f"{name} is not in this subset")
+        assert "문서 01~17" in p.read_text(encoding="utf-8"), (
+            f"{name} cites documents 01-17 without saying they are in the "
+            f"slabx repository, not this one")
+
+    def test_no_other_document_cites_them_silently(self):
+        pattern = re.compile(r"문서 (0[1-9]|1[0-7])\b")
+        bad = []
+        for p in LIVE_DOCS:
+            if p.name in self.CITING:
+                continue
+            text = p.read_text(encoding="utf-8")
+            if pattern.search(text) and "문서 01~17" not in text:
+                bad.append(p.name)
+        assert not bad, f"cite documents 01-17 without the note: {bad}"

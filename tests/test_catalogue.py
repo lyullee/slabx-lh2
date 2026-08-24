@@ -21,6 +21,14 @@ CAT = ROOT / "data" / "catalogue.json"
 
 @pytest.fixture(scope="module")
 def catalogue():
+    """
+    The catalogue as installed.
+
+    **Do not regenerate it here.** `build_dataset.py` writes the full set;
+    the public release ships a filtered copy written by `make_public.py`,
+    and regenerating would silently replace it and defeat the check that it
+    says it was filtered.
+    """
     if not CAT.exists():
         subprocess.run([sys.executable, str(ROOT / "scripts" /
                                             "build_dataset.py")],
@@ -190,10 +198,37 @@ class TestAgainstGeneratedNumbers:
         assert b["rank_corr_Lp_rate"] == pytest.approx(
             records["briggs.e35.rank_corr_rate"]["value"], abs=0.02)
 
-    def test_rise_exponent_pass_count(self, records, generated):
-        assert generated["prereg_plume_width"]["P_W1_pass"] == 0, (
-            "this is the width coupling alone; the catalogue's 1-of-4 is "
-            "with the drag as well")
+    def test_rise_exponent_pass_counts(self, records, generated):
+        """
+        Both configurations, because they differ and the paper must say
+        which is which: the width coupling alone reaches the band on none of
+        the four, and with the exploratory drag on one.
+        """
+        pw = generated["prereg_plume_width"]
+        assert pw["P_W1_pass_width_only"] == \
+            records["rise.P_W1_pass.width_only"]["value"]
+        assert pw["P_W1_pass_with_drag"] == \
+            records["rise.P_W1_pass.with_drag"]["value"]
+
+    def test_the_residual_algebra_holds(self, records, generated):
+        """n = 2/(s+1) against the fitted exponent, worst of the four."""
+        worst = max(generated["prereg_plume_width"]["residual_errors_pct"])
+        assert worst == pytest.approx(
+            records["rise.residual.prediction_accuracy"]["value"] * 100,
+            abs=0.5)
+
+    def test_the_defect_reaches_a_dense_gas(self, records, generated):
+        """
+        13.8 % on Burro 8 with the CoolProp water backend, or 0 where the
+        installed slabx has fixed it upstream. Either way the legacy path is
+        untouched, which is a different statement from "the change is small".
+        """
+        cp = generated["defect_on_dense_gas_coolprop"]
+        if cp["upstream_already_corrected"]:
+            assert cp["change_pct"] == pytest.approx(0.0, abs=1e-6)
+        else:
+            assert cp["change_pct"] == pytest.approx(
+                records["defect.lng_with_coolprop_water"]["value"], abs=0.5)
 
     def test_ground_rr986_does_not_transfer(self, records, generated):
         g = generated["ground_rr986"]

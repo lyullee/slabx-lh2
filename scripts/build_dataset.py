@@ -191,10 +191,22 @@ RECORDS: list[tuple] = [
      "Briggs bent-over plume", "22", "the target"),
     ("rise.exponent.registered_band", "0.6 to 0.9", "-", "-", "model",
      "PREREG_lh2_plume_width P-W1", "prereg", ""),
-    ("rise.P_W1_pass", 1, "of 4", "A", "comparison",
-     "NASA, both corrections, corrected aspect ratio", "31",
-     "was 0/4 before the correction; the earlier 'within half a per cent' "
-     "was a factor-of-two error"),
+    ("rise.P_W1_pass.width_only", 0, "of 4", "A", "comparison",
+     "NASA, width coupling and water correction", "27, 31",
+     "`results.json` -> prereg_plume_width.P_W1_pass_width_only"),
+    ("rise.P_W1_pass.with_drag", 1, "of 4", "A", "comparison",
+     "NASA, plus the exploratory vertical drag", "31",
+     "`results.json` -> prereg_plume_width.P_W1_pass_with_drag. **Neither is "
+     "recorded as a pass**: the outcome is dominated by the pool radius, "
+     "which the NASA paper does not report. docs/35 section 35.3"),
+    ("e34.time_base_offset", 7.67, "s", "-", "measurement",
+     "PRESLHY E3.4, Orig.Time against Sync. Time", "29",
+     "Table 3 is on the scale's own clock; the fills are 30 s long, so "
+     "reading the wrong one moves the rates by tens of per cent"),
+    ("e34.ground_origin_effect", "4.52 to 1.18", "-", "A", "diagnostic",
+     "conduction ratio, per-fill peak vs surface reaching 20 K", "29",
+     "the time origin has to be when the ground first went cold, not when "
+     "each fill peaked"),
     ("rise.exponent.withdrawn_0869", 0.869, "-", "-", "withdrawn",
      "NASA Test 6 before the water correction", "27",
      "the original P-W1 pass; withdrawn, the water fix moves it to 1.047"),
@@ -324,8 +336,17 @@ RECORDS: list[tuple] = [
      "rounded engineering margin", "26",
      "derived and evaluated on the same six trials; **not independently "
      "validated**"),
-    ("lfl.phmsa_lng_factor", 2.5, "-", "-", "measurement",
-     "PHMSA, LNG in stable low wind", "24", "for comparison"),
+    ("lfl.phmsa_lng_factor.withdrawn", 2.5, "-", "-", "withdrawn",
+     "misread of 49 CFR 193.2059(b)(1)", "43",
+     "**withdrawn.** The regulation's 2.5 is an *average gas concentration "
+     "in air of 2.5 percent*, the dispersion endpoint, not a distance "
+     "multiplier. There is no regulatory distance factor to compare "
+     "SAFETY_FACTOR against"),
+    ("regulatory.lng_endpoint_concentration", 2.5, "vol %", "-",
+     "measurement", "49 CFR 193.2059(b)(1)", "43",
+     "the LNG dispersion endpoint; the same section sets F stability, "
+     "2.01 m/s at 10 m, RH 50 %, receptor height 0.5 m and roughness "
+     "0.03 m"),
     ("lfl.grid_independence", 0.001, "fraction", "A", "model",
      "x_max from 120 to 1200 m", "27",
      "after interpolation; before it, four trials returned an identical "
@@ -501,6 +522,19 @@ def main() -> int:
         seen.add(r["key"])
 
     data = ROOT / "data"
+    existing = data / "catalogue.json"
+    if existing.exists():
+        try:
+            note = json.loads(existing.read_text(encoding="utf-8")).get("note")
+        except (json.JSONDecodeError, OSError):
+            note = None
+        if note and "removed" in note:
+            raise SystemExit(
+                "data/catalogue.json is the filtered copy written by "
+                "make_public.py:\n  " + note.split(".")[0] + ".\n"
+                "Regenerating it here would silently restore the records "
+                "that release deliberately removed. Run this in the working "
+                "tree, then run make_public.py again.")
     (data / "catalogue.json").write_text(
         json.dumps({"grades": GRADES, "records": out}, indent=2,
                    ensure_ascii=False), encoding="utf-8")

@@ -43,7 +43,7 @@ pre-lift-off vertical drag, rise-dependent entrainment, added mass, and an
 impinging-jet source. See `docs/24_LH2_SUMMARY.md`.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from . import (diagnostics, lfl, plume_width, pool, vertical_drag,  # noqa: F401
                water_ice)

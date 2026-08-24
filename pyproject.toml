@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "slabx-lh2"
-version = "0.1.0"
+version = "0.1.1"
 description = "Liquid hydrogen extensions and an applicability criterion for the SLAB dense-gas dispersion model"
 readme = "README.md"
 requires-python = ">=3.10"

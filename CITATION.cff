@@ -10,8 +10,7 @@ authors:
     affiliation: Korea Gas Safety Corporation
 repository-code: "https://github.com/lyullee/slabx-lh2"
 license: MIT
-version: 0.1.0
-doi: 10.5281/zenodo.22075011
+version: 0.1.1
 abstract: >-
   Liquid hydrogen extensions to the SLAB dense-gas dispersion model, with a
   criterion that says when the downwind-marching formulation may be used. Two

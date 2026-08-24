@@ -141,19 +141,21 @@ def main() -> int:
                          "D", 0.01, _judge(src, atm)))
 
     print("  PRESLHY E3.5")
-    path = ROOT / "data" / "lh2_e35_conditions_v2.csv"
-    for r in csv.DictReader(path.open(encoding="utf-8")):
-        t = int(r["trial"])
-        if t not in E35_TRIAL or not r["wind_mean_ms"]:
-            continue
-        ori, hgt, d, bar = E35_TESTS[E35_TRIAL[t]]
-        q = E35_FLOW[(d, bar)]
-        u = float(r["wind_mean_ms"])
-        atm = Atmosphere(u_ref=u, z_ref=1.5, T=float(r["T_mean_C"]) + 273.15,
-                         rh=float(r["RH_mean_pct"]), z0=0.01, stability="D")
+    # conditions come from `slabx_lh2.trials`, which ships with the package;
+    # the extracted CSV is a measurement file and is not distributed
+    from slabx_lh2.trials import E35
+    for t, tr in sorted(E35.items()):
+        ori = {"horizontal": "h", "vertical up": "u",
+               "vertical down": "d"}[tr.orientation]
+        hgt, d = tr.release_height_m, tr.nozzle_mm
+        bar = 5 if "5 barg" in tr.note else 1
+        q, u = tr.rate_kg_s, tr.wind_m_s
+        atm = Atmosphere(u_ref=u, z_ref=tr.wind_ref_height_m,
+                         T=tr.temperature_C + 273.15, rh=tr.humidity_pct,
+                         z0=tr.roughness_m, stability=tr.stability)
         if ori == "d":
             src = EvaporatingPool(substance=H2, rate=q, duration=120.,
-                                  area=math.pi * (1.2 if t == 13 else .7) ** 2)
+                                  area=math.pi * tr.pool_radius_m ** 2)
             kind, orient = "pool", "vertical down"
         else:
             src = HorizontalJet(substance=H2, rate=q, duration=120.,
@@ -163,7 +165,8 @@ def main() -> int:
             kind = "jet"
             orient = "horizontal" if ori == "h" else "vertical up"
         rows.append(_row("PRESLHY E3.5", f"trial{t}", kind, orient, q, u,
-                         1.5, "D", 0.01, _judge(src, atm, x_max=40.)))
+                         tr.wind_ref_height_m, tr.stability, tr.roughness_m,
+                         _judge(src, atm, x_max=40.)))
 
     print("  NASA")
     for t, (u, ts, Tc, rh) in sorted(NASA.items()):

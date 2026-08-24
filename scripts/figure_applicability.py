@@ -45,47 +45,44 @@ from pathlib import Path
 import matplotlib
 import numpy as np
 
+ROOT = Path(__file__).resolve().parent.parent
+
 from slabx_lh2.diagnostics import (CRITICAL_WIND_FIT, CRITICAL_WIND_RANGE_KGS,
                                    critical_wind)
 
-#: Campaign, marker, source type, and trials as (rate kg/s, wind m/s,
-#: measured max w_c/u). **The ratio is the model's own diagnostic**, not the
-#: screening curve -- the two disagree and that disagreement is the point.
-CAMPAIGNS = {
-    "FFI (Spadeadam)": {
-        "marker": "o", "source": "jet",
-        "trials": [(0.225, 3.2, 0.11), (0.730, 5.8, 0.03),
-                   (0.828, 6.7, 0.03), (0.715, 5.2, 0.04),
-                   (0.832, 2.7, 0.09), (0.162, 6.5, 0.02)],
-    },
-    "PRESLHY E3.5": {
-        "marker": "s", "source": "jet",
-        "trials": [(0.1395, 3.60, 0.189), (0.1055, 1.83, 0.308),
-                   (0.1055, 3.90, 0.107), (0.1055, 2.50, 0.205),
-                   (0.1055, 2.37, 0.194), (0.298, 2.47, 0.229),
-                   (0.265, 2.700, 0.221), (0.095, 2.700, 0.015),
-                   (0.265, 1.50, 0.123), (0.298, 1.93, 0.158),
-                   (0.1395, 4.17, 0.051), (0.1055, 2.87, 0.065),
-                   (0.1395, 1.60, 0.378), (0.1055, 0.57, 0.697),
-                   (0.298, 1.70, 0.139), (0.265, 1.70, 0.139),
-                   (0.095, 1.90, 0.016)],
-    },
-    "NASA White Sands": {
-        "marker": "^", "source": "pool",
-        "trials": [(10.09, 1.6, 5.14), (11.53, 2.2, 2.36),
-                   (12.23, 3.6, 1.17), (16.82, 6.3, 0.59)],
-    },
-    "Zhang et al. 2024": {
-        "marker": "D", "source": "pool",
-        "trials": [(53.10, 0.13, 217.4), (4.42, 0.30, 44.6),
-                   (5.90, 0.04, 455.4), (3.69, 0.05, 397.0),
-                   (4.25, 0.61, 13.7), (53.10, 0.11, 252.3),
-                   (42.48, 0.01, 821.8), (1.77, 0.15, 110.4)],
-    },
-}
+#: Marker per campaign. **The points themselves are not hard-coded here** --
+#: an earlier version listed the release rates, winds and premise ratios in
+#: this file, and they went stale when the E3.5 conditions were corrected.
+#: They now come from `applicability_all.py`'s output.
+MARKERS = {"FFI": "o", "PRESLHY E3.5": "s", "NASA": "^", "Zhang 2024": "D"}
 
 
-def build(results: dict | None = None):
+def load_cases(path=None):
+    """
+    Read the per-case table `applicability_all.py` writes.
+
+    Regenerate it first if it is missing; the figure is a view of that table
+    and must not carry its own copy of the numbers.
+    """
+    import csv
+    import subprocess
+    p = Path(path) if path else (ROOT / "paper_results" /
+                                 "applicability_all_cases.csv")
+    if not p.exists():
+        subprocess.run([sys.executable,
+                        str(ROOT / "scripts" / "applicability_all.py")],
+                       cwd=ROOT, check=True, capture_output=True)
+    out = {}
+    with p.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            out.setdefault(r["dataset"], []).append(
+                (float(r["rate_kg_s"]), float(r["wind_ref_m_s"]),
+                 float(r["premise_ratio_max"]), r["source_type"]))
+    return out
+
+
+def build(cases: dict | None = None):
+    cases = cases or load_cases()
     import matplotlib.pyplot as plt
     from matplotlib.lines import Line2D
 
@@ -114,10 +111,11 @@ def build(results: dict | None = None):
                     xytext=(4, -3), fontsize=8, color=greys[cls],
                     fontweight="bold" if cls == "D" else "normal")
 
-    for name, spec in CAMPAIGNS.items():
-        for x, y, ratio in spec["trials"]:
+    for name, trials in cases.items():
+        marker = MARKERS.get(name, "o")
+        for x, y, ratio, _kind in trials:
             ok = ratio <= 1.0
-            ax.plot(x, y, spec["marker"], ms=6.8, zorder=5,
+            ax.plot(x, y, marker, ms=6.8, zorder=5,
                     mfc="white" if ok else "#c9302c",
                     mec="#1a1a1a" if ok else "#7d1d1a", mew=1.1)
 
@@ -142,9 +140,9 @@ def build(results: dict | None = None):
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
 
-    handles = [Line2D([], [], ls="none", marker=s["marker"], ms=6.5,
+    handles = [Line2D([], [], ls="none", marker=MARKERS.get(n, "o"), ms=6.5,
                       mfc="white", mec="#1a1a1a", label=n)
-               for n, s in CAMPAIGNS.items()]
+               for n in cases]
     handles += [
         Line2D([], [], ls="none", marker="o", ms=6.8, mfc="#c9302c",
                mec="#7d1d1a", label="outside the premise"),
@@ -166,11 +164,9 @@ def main() -> int:
     if not args.show:
         matplotlib.use("Agg")
 
-    root = Path(__file__).resolve().parent.parent
-    rj = root / "results" / "results.json"
-    results = json.loads(rj.read_text()) if rj.exists() else None
-
-    fig = build(results)
+    root = ROOT
+    cases = load_cases()
+    fig = build(cases)
     if args.show:
         import matplotlib.pyplot as plt
         plt.show()
@@ -183,8 +179,8 @@ def main() -> int:
 
     agree = disagree = 0
     n_in = n_out = 0
-    for name, spec in CAMPAIGNS.items():
-        for x, y, ratio in spec["trials"]:
+    for name, trials in cases.items():
+        for x, y, ratio, _kind in trials:
             measured_in = ratio <= 1.0
             screened_in = y >= critical_wind(x, "D")
             n_in += measured_in

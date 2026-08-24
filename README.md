@@ -1,8 +1,5 @@
 # slabx-lh2
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22075011.svg)](https://doi.org/10.5281/zenodo.22075011)
-[![tests](https://github.com/lyullee/slabx-lh2/actions/workflows/tests.yml/badge.svg)](https://github.com/lyullee/slabx-lh2/actions/workflows/tests.yml)
-
 Liquid hydrogen extensions to the [SLAB](https://github.com/lyullee/slabx)
 dense-gas dispersion model, and a criterion that says **when the model may be
 used at all**.
