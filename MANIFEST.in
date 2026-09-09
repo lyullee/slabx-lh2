@@ -1,0 +1,17 @@
+include README.md LICENSE CITATION.cff CHANGELOG.md pytest.ini
+recursive-include slabx_lh2 *.py py.typed
+recursive-include tests *.py
+recursive-include scripts *.py
+include scripts/run_i9_benchmark.ps1
+recursive-include docs *.md
+include data/SOURCES.md data/catalogue.csv data/catalogue.json
+recursive-include .github *.yml *.yaml
+
+exclude scripts/same_test_flacs.py
+exclude scripts/edit_manuscript_0_1_3.py
+exclude scripts/edit_manuscript_v0_3.py
+exclude scripts/edit_manuscript_v0_4_runtime.py
+prune paper_results
+prune results
+prune figures
+global-exclude __pycache__ *.py[cod] .pytest_cache

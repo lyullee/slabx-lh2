@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slabx-lh2"
+version = "0.1.4"
+description = "Liquid hydrogen extensions and an applicability criterion for the SLAB dense-gas dispersion model"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Ugwiyeon Lee", email = "lyullee@kgs.or.kr"}]
+keywords = [
+    "liquid hydrogen", "dispersion", "SLAB", "process safety",
+    "consequence modelling", "applicability", "cryogenic",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = ["slabx>=1.0.4", "CoolProp>=6.5", "numpy>=1.24"]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+extract = ["openpyxl>=3.1"]
+figures = ["matplotlib>=3.7"]
+pool = ["lh2poolx>=0.1.0"]
+
+[project.urls]
+Homepage = "https://github.com/lyullee/slabx-lh2"
+Repository = "https://github.com/lyullee/slabx-lh2"
+Documentation = "https://github.com/lyullee/slabx-lh2#readme"
+Issues = "https://github.com/lyullee/slabx-lh2/issues"
+"Upstream model" = "https://github.com/lyullee/slabx"
+
+[tool.setuptools.packages.find]
+include = ["slabx_lh2*"]
+
+[tool.setuptools.package-data]
+slabx_lh2 = ["py.typed"]

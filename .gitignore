@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+build_check/
+dist/
+.pytest_cache/
+.venv/
+venv/
+.idea/
+.vscode/
+
+# generated; rebuild with the scripts in scripts/
+results/
+figures/
+paper_results/
+
+# not distributed: measurements belong to the organisations that made them.
+# see data/SOURCES.md
+data/lh2_*.csv

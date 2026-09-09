@@ -1,0 +1,1521 @@
+{
+  "grades": {
+    "A": "deterministic: a model-internal comparison, or a reference correlation. Re-running gives the same number.",
+    "B": "compared against measurement, where the measured quantity is a length, a time, or a binary event.",
+    "C": "compared against measurement, where the target is a concentration, or the trials are few, or an unmeasured input is assumed.",
+    "-": "not a claim: a condition, an input, or a piece of provenance."
+  },
+  "records": [
+    {
+      "key": "water.clamp.error_at_260K",
+      "value": 3.2,
+      "unit": "-",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "CoolPropThermo vs IAPWS sublimation",
+      "doc": "23, 26",
+      "note": "the stock backend returns the triple-point value at every T below it"
+    },
+    {
+      "key": "water.clamp.error_at_240K",
+      "value": 23.3,
+      "unit": "-",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "CoolPropThermo vs IAPWS",
+      "doc": "23, 26",
+      "note": ""
+    },
+    {
+      "key": "water.clamp.error_at_200K",
+      "value": 3900.0,
+      "unit": "-",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "CoolPropThermo (slabx <= 1.0.5) vs IAPWS",
+      "doc": "23, 26, 42",
+      "note": "the headline figure. **slabx 1.0.6 fixed this upstream**, and against 1.0.6 the ratio is 1; the number records what the defect was, not what the current release does"
+    },
+    {
+      "key": "water.clamp.error_at_150K",
+      "value": 100000000.0,
+      "unit": "-",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "CoolPropThermo vs IAPWS",
+      "doc": "23, 26",
+      "note": ""
+    },
+    {
+      "key": "water.iapws.accuracy_to_230K",
+      "value": 0.03,
+      "unit": "fraction",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "Wagner, Riethmann, Feistel & Harvey 2011",
+      "doc": "23",
+      "note": "the sublimation curve against the Magnus reference"
+    },
+    {
+      "key": "water.fusion_enthalpy",
+      "value": 333400.0,
+      "unit": "J/kg",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "IAPWS",
+      "doc": "23",
+      "note": "added below the triple point; a physical constant"
+    },
+    {
+      "key": "negctl.lng_width_gate.max_change",
+      "value": 0.0,
+      "unit": "%",
+      "grade": "A",
+      "kind": "model",
+      "source": "ten LNG pool trials, identical clamped CoolProp water on both arms",
+      "doc": "54",
+      "note": "**true negative control.** The hydrogen-only plume-width coupling is bit-inactive for LNG in every trial; the water treatment is held fixed"
+    },
+    {
+      "key": "lfl.unchanged_by_upstream_fix",
+      "value": true,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "the full FFI set on slabx 1.0.4 and 1.0.6",
+      "doc": "42",
+      "note": "**every LFL distance is identical to two decimals** on both, and so are the verdicts and the required factor of 1.1138. slabx_lh2 supplies the correction on 1.0.4 and stands aside on 1.0.6, and the answer does not depend on which"
+    },
+    {
+      "key": "crossfluid.lng_burro8.water_treatment_change",
+      "value": 13.54,
+      "unit": "%",
+      "grade": "A",
+      "kind": "model",
+      "source": "Burro 8, LFL distance, deliberately clamped versus corrected CoolProp water backend",
+      "doc": "54",
+      "note": "**cross-fluid ablation, not a current software defect and not a negative control.** It shows that sub-triple-point water treatment can matter outside hydrogen; slabx 1.0.6 already carries the correction"
+    },
+    {
+      "key": "slabx.water_fix_upstream",
+      "value": "1.0.6",
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "PyPI slabx 1.0.6, thermo/coolprop.py",
+      "doc": "42",
+      "note": "the correction was adopted upstream: _sublimation_pressure with the IAPWS coefficients and _H_FUSION = {water: 333400}. slabx_lh2's water_ice is redundant against 1.0.6 and detects it behaviourally"
+    },
+    {
+      "key": "negctl.lng_pool.max_change.withdrawn_0_37",
+      "value": 0.37,
+      "unit": "%",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "hand calculation during the session",
+      "doc": "26",
+      "note": "superseded first by 0.25 %, then withdrawn with the mixed-control design"
+    },
+    {
+      "key": "negctl.lng_pool.max_change.withdrawn_0_25",
+      "value": 0.25,
+      "unit": "%",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "legacy water wrapper comparison",
+      "doc": "42",
+      "note": "**withdrawn.** It mixed the water treatment with the width gate and therefore was not a negative control"
+    },
+    {
+      "key": "negctl.burro8.change.withdrawn_0_27",
+      "value": 0.27,
+      "unit": "%",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "Burro 8, mixed module comparison",
+      "doc": "24",
+      "note": "**withdrawn.** Replaced by a bit-identical width-gate negative control and a separate 13.54 % cross-fluid water ablation"
+    },
+    {
+      "key": "negctl.prairie_grass",
+      "value": "bit-identical",
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "Prairie Grass, passive SO2",
+      "doc": "24",
+      "note": "both modules active"
+    },
+    {
+      "key": "negctl.ammonia.change",
+      "value": 0.0,
+      "unit": "%",
+      "grade": "A",
+      "kind": "model",
+      "source": "Desert Tortoise-like ammonia pool",
+      "doc": "23",
+      "note": "T_min 266 K, above the water triple point, so the sublimation curve is never reached"
+    },
+    {
+      "key": "pool.radius.median_ratio",
+      "value": 1.03,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "six reported pool radii",
+      "doc": "24, 26",
+      "note": "USE THIS. Excludes NASA, whose pool was confined by the pond walls"
+    },
+    {
+      "key": "pool.radius.median_ratio.with_nasa",
+      "value": 1.11,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "seven radii including NASA",
+      "doc": "24",
+      "note": "document 24 quotes this; prefer 1.03 and footnote NASA"
+    },
+    {
+      "key": "pool.regression.literature",
+      "value": 1.0,
+      "unit": "mm/s",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "Takeno 1994, Bailey 1960, ISO TR 15916 B.1",
+      "doc": "28",
+      "note": ""
+    },
+    {
+      "key": "pool.radius.sensitivity_to_E",
+      "value": "0.67 to 0.91 m",
+      "unit": "-",
+      "grade": "C",
+      "kind": "model",
+      "source": "E3.5 trial 7, E from 1.0 to 0.54 mm/s",
+      "doc": "28",
+      "note": "observed 0.70 m; E is a choice and this is how much it matters"
+    },
+    {
+      "key": "ground.e34.median_ratio",
+      "value": 1.31,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "PRESLHY E3.4 Table 3, four periods",
+      "doc": "28",
+      "note": "concrete only, on windows the report chose; see docs/29 for the full set"
+    },
+    {
+      "key": "ground.e34.full.concrete02",
+      "value": 1.18,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "E3.4 raw data, 42 rate points",
+      "doc": "29",
+      "note": "no wind"
+    },
+    {
+      "key": "ground.e34.full.concrete03",
+      "value": 2.73,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "E3.4 raw data, 77 rate points",
+      "doc": "29",
+      "note": "side wind 4 m/s"
+    },
+    {
+      "key": "ground.e34.full.sand02",
+      "value": 0.25,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "E3.4 raw data, 76 rate points",
+      "doc": "29",
+      "note": ""
+    },
+    {
+      "key": "ground.e34.full.sand03",
+      "value": 0.31,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "E3.4 raw data, 94 rate points",
+      "doc": "29",
+      "note": ""
+    },
+    {
+      "key": "ground.e34.depth_drift",
+      "value": 4.3,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "erfc inversion at 4 to 54 mm",
+      "doc": "29",
+      "note": "the box is 100 mm on Styrofoam and is not semi-infinite"
+    },
+    {
+      "key": "ground.rr986.depth_drift",
+      "value": 1.8,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "erfc inversion at 10 to 30 mm",
+      "doc": "33",
+      "note": "an outdoor slab; confirms the attribution of the E3.4 drift"
+    },
+    {
+      "key": "ground.rr986.alpha_vs_model_min",
+      "value": 2.82,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "RR986 Figure 15, 10 mm",
+      "doc": "33",
+      "note": ""
+    },
+    {
+      "key": "ground.rr986.alpha_vs_model_max",
+      "value": 5.04,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "RR986 Figure 15, 20 mm",
+      "doc": "33",
+      "note": ""
+    },
+    {
+      "key": "ground.rr986.temperature_bias",
+      "value": 37.4,
+      "unit": "K",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "RR986 Figure 15, 29 points",
+      "doc": "33",
+      "note": "digitising uncertainty is 5 K; the properties do not transfer"
+    },
+    {
+      "key": "ground.concrete.alpha_warm",
+      "value": 6.6e-07,
+      "unit": "m2/s",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "room-temperature handbook value",
+      "doc": "28",
+      "note": "using this under a cryogenic pool halves the heat flux"
+    },
+    {
+      "key": "ground.critical_heat_flux",
+      "value": 120000.0,
+      "unit": "W/m2",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "Shirai et al., Cryogenics 50 (2010) 410",
+      "doc": "28",
+      "note": "caps the conduction solution for the first 24 s"
+    },
+    {
+      "key": "ground.chf.max_rate",
+      "value": 67.4,
+      "unit": "g/s",
+      "grade": "A",
+      "kind": "model",
+      "source": "A x CHF / dh_vap",
+      "doc": "28",
+      "note": "PRESLHY report 66.8"
+    },
+    {
+      "key": "ground.chf.binding_time",
+      "value": 24.3,
+      "unit": "s",
+      "grade": "A",
+      "kind": "model",
+      "source": "when conduction falls below the CHF",
+      "doc": "28",
+      "note": "PRESLHY report 24.1"
+    },
+    {
+      "key": "ground.flux_vs_literature.withdrawn",
+      "value": 0.97,
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "warm properties at an arbitrary t = 60 s",
+      "doc": "28",
+      "note": "THE 97 %. There is no single ratio; it runs 2.48 to 0.68 over 60 to 800 s with the correct properties"
+    },
+    {
+      "key": "rise.exponent.baseline",
+      "value": 1.28,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "NASA Test 6, no corrections",
+      "doc": "27",
+      "note": "range 1.23 to 1.34 over the four trials"
+    },
+    {
+      "key": "rise.exponent.width_only",
+      "value": 1.07,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "NASA Test 6, width coupling",
+      "doc": "27",
+      "note": "range 1.05 to 1.28"
+    },
+    {
+      "key": "rise.exponent.both",
+      "value": 1.05,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "NASA Test 6, width coupling and drag",
+      "doc": "31",
+      "note": "range 0.86 to 1.30 after the aspect-ratio correction"
+    },
+    {
+      "key": "rise.exponent.briggs",
+      "value": 0.667,
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "Briggs bent-over plume",
+      "doc": "22",
+      "note": "the target"
+    },
+    {
+      "key": "rise.exponent.registered_band",
+      "value": "0.6 to 0.9",
+      "unit": "-",
+      "grade": "-",
+      "kind": "model",
+      "source": "PREREG_lh2_plume_width P-W1",
+      "doc": "prereg",
+      "note": ""
+    },
+    {
+      "key": "rise.P_W1_pass.width_only",
+      "value": 0,
+      "unit": "of 4",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "NASA, width coupling and water correction",
+      "doc": "27, 31",
+      "note": "`results.json` -> prereg_plume_width.P_W1_pass_width_only"
+    },
+    {
+      "key": "rise.P_W1_pass.with_drag",
+      "value": 1,
+      "unit": "of 4",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "NASA, plus the exploratory vertical drag",
+      "doc": "31",
+      "note": "`results.json` -> prereg_plume_width.P_W1_pass_with_drag. **Neither is recorded as a pass**: the outcome is dominated by the pool radius, which the NASA paper does not report. docs/35 section 35.3"
+    },
+    {
+      "key": "e34.ground_origin_effect",
+      "value": "4.52 to 1.18",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "conduction ratio, per-fill peak vs surface reaching 20 K",
+      "doc": "29",
+      "note": "the time origin has to be when the ground first went cold, not when each fill peaked"
+    },
+    {
+      "key": "rise.exponent.withdrawn_0869",
+      "value": 0.869,
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "NASA Test 6 before the water correction",
+      "doc": "27",
+      "note": "the original P-W1 pass; withdrawn, the water fix moves it to 1.047"
+    },
+    {
+      "key": "rise.residual.dlnB_dlnz",
+      "value": "0.39 to 0.59",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "NASA four trials, both corrections",
+      "doc": "27",
+      "note": "Briggs needs 1.0; the width is coupled only partway"
+    },
+    {
+      "key": "rise.residual.dlnh_dlnz",
+      "value": "0.23 to 0.49",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "NASA four trials",
+      "doc": "27",
+      "note": "Briggs needs 1.0; **the depth is not coupled to the rise at all**"
+    },
+    {
+      "key": "rise.residual.prediction_accuracy",
+      "value": 0.059,
+      "unit": "fraction",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "n = 2/(s+1) against the fitted exponent",
+      "doc": "27",
+      "note": "worst of the four; the set is 3.0, 3.1, 5.7 and 5.9 %. This is what turns a failure into a located missing term"
+    },
+    {
+      "key": "drag.cd0_continuous",
+      "value": 1.17,
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "circular cylinder in crossflow, classical",
+      "doc": "31",
+      "note": "not fitted"
+    },
+    {
+      "key": "drag.cd1_continuous",
+      "value": 1.2,
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "aspect-ratio dependence, numerical",
+      "doc": "31",
+      "note": "not fitted"
+    },
+    {
+      "key": "premise.ffi.max_ratio",
+      "value": 0.182,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "six FFI trials",
+      "doc": "22",
+      "note": "range 0.048 to 0.182; all inside"
+    },
+    {
+      "key": "premise.e35.max_ratio",
+      "value": 0.697,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "seventeen E3.5 trials",
+      "doc": "27",
+      "note": "range 0.015 to 0.697; all inside"
+    },
+    {
+      "key": "premise.nasa.max_ratio",
+      "value": 4.74,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "four NASA trials",
+      "doc": "31",
+      "note": "range 0.61 to 4.74; three of four outside"
+    },
+    {
+      "key": "premise.zhang.max_ratio",
+      "value": 821.8,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "eight Zhang trials",
+      "doc": "27",
+      "note": "range 13.7 to 821.8; all outside"
+    },
+    {
+      "key": "premise.nasa.rise_angle",
+      "value": 75.0,
+      "unit": "deg",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "NASA Test 6",
+      "doc": "22",
+      "note": "the cloud rises at 75 degrees while the formulation integrates downwind"
+    },
+    {
+      "key": "premise.zhang.rise_angle",
+      "value": "85.8 to 89.9",
+      "unit": "deg",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "eight Zhang trials",
+      "doc": "27",
+      "note": "the failure is visible, which is the property the monitoring application depends on"
+    },
+    {
+      "key": "ucrit.D.a",
+      "value": 2.611924,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "bisected on max w_c/u with the width-coupled 0.1.3 configuration; fitted log-log",
+      "doc": "30",
+      "note": ""
+    },
+    {
+      "key": "ucrit.D.b",
+      "value": 0.133865,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "as above",
+      "doc": "30",
+      "note": ""
+    },
+    {
+      "key": "ucrit.fit_range",
+      "value": "0.1 to 30",
+      "unit": "kg/s",
+      "grade": "-",
+      "kind": "model",
+      "source": "as above",
+      "doc": "30",
+      "note": "outside this it is extrapolation"
+    },
+    {
+      "key": "ucrit.withdrawn",
+      "value": "2.5 q^0.15",
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "a round figure in document 22",
+      "doc": "30",
+      "note": "historical approximation; not what critical_wind uses"
+    },
+    {
+      "key": "ucrit.screening_vs_diagnostic",
+      "value": "28 of 35 agree",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "four campaigns, scripts/applicability_all.py",
+      "doc": "37",
+      "note": "seven disagreements, all momentum jets that the pool-fitted screen flags conservatively"
+    },
+    {
+      "key": "ucrit.screening_misses",
+      "value": 0,
+      "unit": "cases",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "four campaigns, n = 35",
+      "doc": "37",
+      "note": "**no case that the model refuses was passed by the screen.** A false flag costs one unnecessary integration; a miss would let a caller use a number the model does not stand behind"
+    },
+    {
+      "key": "ucrit.agreement_on_pools",
+      "value": "15 of 15",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "NASA, Zhang, E3.5 downward",
+      "doc": "37",
+      "note": "the screen was fitted to a pool source, so this is the case it should get right; every disagreement is a jet"
+    },
+    {
+      "key": "runtime.warm_e2e_p95_ffi4",
+      "value": 65.648925,
+      "unit": "ms",
+      "grade": "-",
+      "kind": "model",
+      "source": "i9-12900K, Python 3.12.14, slabx 1.0.6, slabx-lh2 0.1.3, n = 100",
+      "doc": "60",
+      "note": "p99/p50 = 1.080, no failures; 380-row raw record and hashes archived"
+    },
+    {
+      "key": "runtime.warm_e2e_p95_out_of_scope_ms",
+      "value": 149.077435,
+      "unit": "ms",
+      "grade": "-",
+      "kind": "model",
+      "source": "NASA test 6, same 0.1.3 run, n = 100",
+      "doc": "60",
+      "note": "the slowest of the three single cases: **refusing costs a full integration**"
+    },
+    {
+      "key": "runtime.batch35_sequential_p95",
+      "value": 4196.8819,
+      "unit": "ms",
+      "grade": "-",
+      "kind": "model",
+      "source": "35 scenarios sequentially, same 0.1.3 run, n = 30",
+      "doc": "60",
+      "note": "p99/p50 = 1.015. FFI 6, PRESLHY E3.5 17, NASA 4, Zhang 8"
+    },
+    {
+      "key": "runtime.batch35_parallel.not_quotable",
+      "value": "3.7 to 3.9",
+      "unit": "-",
+      "grade": "-",
+      "kind": "model",
+      "source": "35 scenarios on 6 and on 4 processes, n = 30 each",
+      "doc": "53",
+      "note": "**do not quote.** p99/p50 is 3.67 on six workers and 3.88 on four -- reducing the worker count makes it worse, so this is not a tuning problem. The parallel run also degrades the sequential measurement in the same process, from p99/p50 1.06 to 1.36"
+    },
+    {
+      "key": "runtime.cold_over_warm",
+      "value": 23.6009,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "cold start p50 against warm p50, same 0.1.3 run",
+      "doc": "60",
+      "note": "**a per-request subprocess is not viable.** Use a pre-warmed worker"
+    },
+    {
+      "key": "runtime.out_of_scope_is_the_slowest",
+      "value": true,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "NASA Test 6 against the two FFI cases, same 0.1.3 run",
+      "doc": "60",
+      "note": "**refusing costs a full integration.** p95 149.077 ms against 65.649 and 117.070 ms"
+    },
+    {
+      "key": "runtime.workers_must_be_processes",
+      "value": true,
+      "unit": "-",
+      "grade": "-",
+      "kind": "diagnostic",
+      "source": "the module-global patch plus the cold-start cost",
+      "doc": "31, 37",
+      "note": "threads raise ConcurrentPatchError, and a fresh process costs about thirty warm calls, so the pool has to be pre-warmed processes"
+    },
+    {
+      "key": "ablation.ffi_driver",
+      "value": "water correction",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "2x2, scripts/ablation_2x2.py",
+      "doc": "37",
+      "note": "W0C0 = W0C1 and W1C0 = W1C1 on FFI: the coupling is gated on is_lofted and no FFI trial lofts. Tests 1 and 6 move from outside the bracket to inside on the water correction alone"
+    },
+    {
+      "key": "ablation.nasa_driver",
+      "value": "width coupling",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "2x2 rise exponent",
+      "doc": "37",
+      "note": "water alone raises the exponent 1.19 to 1.28, the coupling alone drops it to 0.89, and together they partly cancel at 1.05"
+    },
+    {
+      "key": "briggs.threshold",
+      "value": 20.0,
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "Briggs 1973",
+      "doc": "prereg",
+      "note": "stated uncertainty a factor of two"
+    },
+    {
+      "key": "briggs.ffi.lifted",
+      "value": 29.0,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "FFI Test 6",
+      "doc": "prereg",
+      "note": "the rest are 2.3 to 11.7"
+    },
+    {
+      "key": "briggs.e35.rank_corr_wind",
+      "value": -0.891,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "seventeen E3.5 trials",
+      "doc": "prereg",
+      "note": ""
+    },
+    {
+      "key": "briggs.e35.rank_corr_rate",
+      "value": 0.213,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "seventeen E3.5 trials",
+      "doc": "prereg",
+      "note": "the point: L_p sorts by wind, not by release rate"
+    },
+    {
+      "key": "briggs.e35.rank_corr_wind.robustness",
+      "value": "-0.891 to -0.936",
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "three flow-rate bases: nominal, meter peak, meter mean",
+      "doc": "36",
+      "note": "the rate spans 14 to 298 g/s across the three and the ordering does not move; the rate correlation stays at +0.20 to +0.31"
+    },
+    {
+      "key": "ffi.test5.duration.withdrawn",
+      "value": 120.0,
+      "unit": "s",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "the first unignited release only",
+      "doc": "36",
+      "note": "replaced by 240 s; the LFL distance moves 45.75 to 43.56 m and no verdict changes"
+    },
+    {
+      "key": "briggs.nasa.rank_corr_wind",
+      "value": -1.0,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "four NASA trials",
+      "doc": "prereg",
+      "note": ""
+    },
+    {
+      "key": "briggs.rr986.transition",
+      "value": "2.7 to 2.9",
+      "unit": "m/s",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "four RR986 trials at fixed 60 L/min",
+      "doc": "prereg",
+      "note": "RR986's own text says the cloud was more buoyant below 3 m/s"
+    },
+    {
+      "key": "briggs.threshold_transfers",
+      "value": false,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "four campaigns",
+      "doc": "prereg",
+      "note": "separates three sets spanning 0.07 to 0.83 kg/s and fails on NASA at 10 to 17; carried as an ordering variable, not a gate"
+    },
+    {
+      "key": "lfl.in_bracket",
+      "value": 5,
+      "unit": "of 6",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "FFI arcs at 30, 50 and 100 m",
+      "doc": "24, 27",
+      "note": ""
+    },
+    {
+      "key": "lfl.safety_factor_required",
+      "value": 1.114,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "the six FFI trials",
+      "doc": "27",
+      "note": "REPLACES 1.23, which came from the un-interpolated grid"
+    },
+    {
+      "key": "lfl.safety_factor_required.withdrawn",
+      "value": 1.23,
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "before the crossing was interpolated",
+      "doc": "27",
+      "note": "replaced by 1.114. slabx integrates on a geometric grid and the distance was read at the last node above the limit rather than at the interpolated crossing, which made four trials return an identical 40.75 m"
+    },
+    {
+      "key": "lfl.safety_factor_adopted",
+      "value": 1.25,
+      "unit": "-",
+      "grade": "-",
+      "kind": "model",
+      "source": "rounded engineering margin",
+      "doc": "26",
+      "note": "derived and evaluated on the same six trials; **not independently validated**"
+    },
+    {
+      "key": "lfl.phmsa_lng_factor.withdrawn",
+      "value": 2.5,
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "misread of 49 CFR 193.2059(b)(1)",
+      "doc": "43",
+      "note": "**withdrawn.** The regulation's 2.5 is an *average gas concentration in air of 2.5 percent*, the dispersion endpoint, not a distance multiplier. There is no regulatory distance factor to compare SAFETY_FACTOR against"
+    },
+    {
+      "key": "regulatory.lng_endpoint_concentration",
+      "value": 2.5,
+      "unit": "vol %",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "49 CFR 193.2059(b)(1)",
+      "doc": "43",
+      "note": "the LNG dispersion endpoint; the same section sets F stability, 2.01 m/s at 10 m, RH 50 %, receptor height 0.5 m and roughness 0.03 m"
+    },
+    {
+      "key": "lfl.grid_independence.withdrawn",
+      "value": 0.001,
+      "unit": "fraction",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "a single trial, taken as representative",
+      "doc": "50",
+      "note": "**withdrawn.** Re-measured on all six over x_max 120 to 1200 m, the spread is 0.07 to 1.65 %"
+    },
+    {
+      "key": "lfl.grid_independence",
+      "value": 0.0165,
+      "unit": "fraction",
+      "grade": "A",
+      "kind": "model",
+      "source": "all six FFI trials, x_max 120 to 1200 m",
+      "doc": "50",
+      "note": "worst of six: 0.07 % on test 4, **1.65 % on test 6**. The lofting trial is the sensitive one, because where the integration stops changes how much of the rise is resolved. `n_puff_steps` has no effect in plume mode. After interpolation; before it, four trials returned an identical 40.75 m because the geometric grid is shared"
+    },
+    {
+      "key": "lfl.humidity_insensitivity",
+      "value": 1.3,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "RH 60, 75 and 90 %",
+      "doc": "27",
+      "note": "the ratio of the largest to the smallest LFL distance; the arc concentrations move by an order of magnitude over the same sweep"
+    },
+    {
+      "key": "air.onset.N2",
+      "value": 90.27,
+      "unit": "mol%",
+      "grade": "A",
+      "kind": "model",
+      "source": "adiabatic mix with sublimation below the triple points",
+      "doc": "30",
+      "note": ""
+    },
+    {
+      "key": "air.onset.O2",
+      "value": 88.15,
+      "unit": "mol%",
+      "grade": "A",
+      "kind": "model",
+      "source": "as above",
+      "doc": "30",
+      "note": ""
+    },
+    {
+      "key": "air.ufl_hydrogen",
+      "value": 75.0,
+      "unit": "mol%",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "standard",
+      "doc": "30",
+      "note": "onset is above it, so air condensation never happens inside the flammable range"
+    },
+    {
+      "key": "air.effect_direction",
+      "value": "lighter",
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "rho/rho_a 0.883 to 0.729 at 97 mol%",
+      "doc": "30",
+      "note": "latent heat and the loss of heavy species both lower the density"
+    },
+    {
+      "key": "orientation.slabx_ratio",
+      "value": 1.03,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "same pair, both as HorizontalJet",
+      "doc": "18",
+      "note": ""
+    },
+    {
+      "key": "orientation.chen_rodi_ratio",
+      "value": 1.0,
+      "unit": "-",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "Chen & Rodi similarity law on the same pair",
+      "doc": "22",
+      "note": "**the reference correlation cannot distinguish them either**"
+    },
+    {
+      "key": "orientation.pool_source_ratio",
+      "value": 13684.0,
+      "unit": "-",
+      "grade": "A",
+      "kind": "model",
+      "source": "vertical-down as a momentumless pool",
+      "doc": "prereg",
+      "note": "the rejected ImpingingJet; the measurement is bracketed by four orders of magnitude"
+    },
+    {
+      "key": "orientation.misreading",
+      "value": "horizontal under-predicted",
+      "unit": "-",
+      "grade": "B",
+      "kind": "diagnostic",
+      "source": "FFI Tests 3, 4, 7 at 30 m",
+      "doc": "prereg",
+      "note": "document 18 read this backwards: vertical-down is already right and the horizontal case is 2.6x low"
+    },
+    {
+      "key": "hyram.trials_run",
+      "value": "1 of 4",
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "FFI outdoor trials",
+      "doc": "18",
+      "note": "HyRAM+ 6.1 has no ground boundary, so vertical-down releases pass through the ground"
+    },
+    {
+      "key": "hyram.cloud_height_at_100m",
+      "value": 99.9,
+      "unit": "m",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "FFI Test 4",
+      "doc": "18",
+      "note": "slabx 1.83 m, measured 1.8 m"
+    },
+    {
+      "key": "provenance.nasa.detachment.withdrawn",
+      "value": "20 m",
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "Ichard et al. reading a contour plot",
+      "doc": "27",
+      "note": "the original reports ground-level travel of 50 to 100 m; two different measurements"
+    },
+    {
+      "key": "entrainment.excess_vs_free_jet.withdrawn",
+      "value": "4.4 to 5.4",
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "an arithmetic error",
+      "doc": "47",
+      "note": "**withdrawn.** The Ricou-Spalding comparison used a mass-weighted source density of 40.2 kg/m3 where the model uses 2.686. Corrected, the ratio is 1.17 to 1.48"
+    },
+    {
+      "key": "entrainment.excess_at_30m.withdrawn",
+      "value": 2.6,
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "R_flux[0] taken as the release rate",
+      "doc": "52",
+      "note": "**withdrawn**, and the 'three symptoms, one number' claim with it. R_flux[0] is half the release rate and R_flux is a half flux; the total at 30 m is 254.63 kg/s"
+    },
+    {
+      "key": "entrainment.excess.withdrawn_1_72",
+      "value": 1.72,
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "R_flux read as the total",
+      "doc": "52",
+      "note": "**withdrawn.** Half the true value; see rflux.is_a_half_flux"
+    },
+    {
+      "key": "displacement.withdrawn_1_65",
+      "value": 1.65,
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "difference of two ratios, one of them from a half flux",
+      "doc": "52",
+      "note": "**withdrawn.** Use the qualitative statement instead"
+    },
+    {
+      "key": "entrainment.withdrawn_span",
+      "value": "0.8 to 5.9",
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "five assumptions treated as independent",
+      "doc": "52",
+      "note": "**withdrawn.** The advection speed cancels, the mixture density never entered, and peak-to-bulk and the shape factor are the same knob. Two explicit scenarios replace it"
+    },
+    {
+      "key": "entrainment.conditional_ratio.t6_half_peak",
+      "value": 2.479,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "FFI test 6, 2*R_flux against the arc, bulk = 0.5 peak",
+      "doc": "54",
+      "note": "**illustrative conditional scenario, not a verified Gaussian profile and not a bound.** Test 4 gives 2.076 under the same assumption"
+    },
+    {
+      "key": "entrainment.conditional_ratio.t6_peak_equals_bulk",
+      "value": 5.56,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "FFI test 6, bulk = peak",
+      "doc": "54",
+      "note": "**extreme conditional scenario, not a lower bound.** It minimizes the inferred flux and therefore maximizes the model/inferred ratio; Test 4 gives 4.547"
+    },
+    {
+      "key": "humidity.bracket_count_depends_on_it",
+      "value": "5 of 6 at RH >= 75 %, 3 of 6 at RH <= 50 %",
+      "unit": "-",
+      "grade": "B",
+      "kind": "diagnostic",
+      "source": "six FFI trials at RH 0, 25, 50, 75, 90, 100 %",
+      "doc": "53",
+      "note": "**quote the assumed humidity wherever the count is quoted.** Tests 1 and 6 cross from inside the bracket to conservative below 50 %, and their LFL distances move by 54 and 57 % across the range"
+    },
+    {
+      "key": "humidity.horizontal_underprediction_at_every_rh",
+      "value": "0.29 to 0.40",
+      "unit": "-",
+      "grade": "B",
+      "kind": "diagnostic",
+      "source": "the two horizontal trials over the full RH range",
+      "doc": "53",
+      "note": "both horizontal trials remain underpredicted throughout RH 0--100 %. This does **not** imply a strict orientation split: at RH 100 % one downward trial also remains underpredicted"
+    },
+    {
+      "key": "humidity.strict_orientation_split_at_every_rh",
+      "value": false,
+      "unit": "-",
+      "grade": "B",
+      "kind": "diagnostic",
+      "source": "six FFI trials over RH 0--100 %",
+      "doc": "54",
+      "note": "the stronger orientation-separation claim is false at RH 100 %"
+    },
+    {
+      "key": "sensors.fixed_x_cross_section_identifiable",
+      "value": false,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "15 polar-arc sensors at nominal radius 30 m",
+      "doc": "54",
+      "note": "the arc is not a fixed downwind plane after wind rotation: x spans 18.88--29.84 m in Test 4 and 10.26--29.97 m in Test 6. Temporal means also cannot be divided by temporal maxima to infer a spatial peak-to-bulk factor"
+    },
+    {
+      "key": "sensors.lateral_mean_over_peak.withdrawn",
+      "value": "0.34 to 0.41",
+      "unit": "-",
+      "grade": "-",
+      "kind": "withdrawn",
+      "source": "polar-arc time means divided by temporal maxima",
+      "doc": "53",
+      "note": "**withdrawn.** The calculation treated a polar arc as a fixed-x cross-section and mixed temporal means with maxima"
+    },
+    {
+      "key": "sensors.vertical_mean_not_identifiable",
+      "value": true,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "sensors reach 1.8 m; the model cloud is 5.7 to 7.7 m deep",
+      "doc": "53",
+      "note": "**the cross-sectional mean the mass balance needs cannot be measured.** 2.479 and 5.560 are diagnostic scenarios under stated assumptions, not measurements"
+    },
+    {
+      "key": "model.total_flux_t6_30m",
+      "value": 254.63,
+      "unit": "kg/s",
+      "grade": "A",
+      "kind": "model",
+      "source": "2 * R_flux from the trajectory",
+      "doc": "52",
+      "note": "**no assumption on the model side.** Report both scenarios and do not average them; there is no distribution over the peak-to-bulk conversion"
+    },
+    {
+      "key": "displacement.cloud_above_sensors",
+      "value": true,
+      "unit": "-",
+      "grade": "B",
+      "kind": "diagnostic",
+      "source": "FFI test 6 at 30 m",
+      "doc": "52",
+      "note": "the model places the centreline at 2.46 m and the sensors reach 1.8 m. **Qualitative only** -- an earlier numerical decomposition was withdrawn because it was taken from a half flux"
+    },
+    {
+      "key": "entrainment.free_jet_also_excessive",
+      "value": 2.2,
+      "unit": "-",
+      "grade": "A",
+      "kind": "comparison",
+      "source": "Ricou-Spalding at 30 m against the measurement",
+      "doc": "48",
+      "note": "**the free-jet law over-predicts too.** A cold jet in a co-flowing wind entrains about half of what a free jet in still air does, and neither closure represents that"
+    },
+    {
+      "key": "depth.not_independently_adjustable",
+      "value": true,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "thermal-convection ablation",
+      "doc": "48",
+      "note": "removing the thermal term drops u* by 14 % and the depth by 4 %: R falls, B falls with it, and h barely moves"
+    },
+    {
+      "key": "ustar.inflation_at_30m",
+      "value": 2.08,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "FFI test 6, in-cloud against ambient friction velocity",
+      "doc": "48",
+      "note": "split about evenly between retained source shear in the ground term and thermal convection, which itself scales as h^(2/3) and so feeds back. **Both are defensible physics**; the sum is too much here"
+    },
+    {
+      "key": "depth.vs_passive_limit",
+      "value": 3.0,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "FFI test 6 at 30 m against Pasquill-Gifford D",
+      "doc": "47",
+      "note": "the modelled cloud is 8.1 m wide and 7.8 m deep; the passive layer is 7.2 m and 2.6 m. **The width is right to 10 % and the depth is three times too large**, which is the whole factor of 2.6"
+    },
+    {
+      "key": "depth_cap.rejected",
+      "value": "three registrations",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "PREREG_lh2_depth_cap, _depth_plume, _depth_virtual",
+      "doc": "prereg",
+      "note": "**all three rejected on the dense-gas controls**: 36 %, then 1.33 % with the right stability curves, then 17 % with the measured k. Lowering the ceiling made it worse, which is the signature of a constraint removing real physics"
+    },
+    {
+      "key": "slabx.passive_depth_ratio",
+      "value": 1.09,
+      "unit": "-",
+      "grade": "A",
+      "kind": "measurement",
+      "source": "Prairie Grass, depth against Briggs sigma_z",
+      "doc": "prereg",
+      "note": "**SLAB's own passive asymptote**: 1.87 at 10 m, 1.20 at 100 m, 1.09 from 300 m out. Nobody had written this down; the textbook top-hat factor of 1.5 is above anything the model produces passively"
+    },
+    {
+      "key": "premise.depth_is_not_bounded_by_passive",
+      "value": true,
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "three rejected registrations",
+      "doc": "prereg",
+      "note": "**a cloud can be thicker than a passively dispersing layer.** Near the source it has gravity-driven spreading and shear of its own, so 'turbulence sets the maximum depth' is false and a ceiling is the wrong shape of correction"
+    },
+    {
+      "key": "control.passed_while_inert",
+      "value": 3,
+      "unit": "occurrences",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "bug 8, and PREREG_lh2_depth_cap NC1/NC2",
+      "doc": "prereg",
+      "note": "**a control that passes while the code under test does nothing has tested nothing.** vertical_drag patched only the submodule; depth_cap's frame walk was broken. Both reported clean nulls. `depth_cap.fired_count` now makes it checkable"
+    },
+    {
+      "key": "entrainment.vs_free_jet",
+      "value": "1.17 to 1.48",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "Ricou-Spalding law, 2 to 31 m, FFI test 6, correct source density",
+      "doc": "47",
+      "note": "inside the scatter of the coefficient; **the entrainment is not the defect**"
+    },
+    {
+      "key": "ffi.measurements_are_mutually_inconsistent",
+      "value": true,
+      "unit": "-",
+      "grade": "B",
+      "kind": "diagnostic",
+      "source": "FFI test 6, 30 m arc",
+      "doc": "47",
+      "note": "the 21 vol% maximum implies -56 C and the coldest reading is -25.7 C. **Maximum concentration and minimum temperature are at different sensors and different times and cannot be combined**"
+    },
+    {
+      "key": "ffi.temperature_sensors_unused",
+      "value": 616,
+      "unit": "readings",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "data/lh2_ffi_sensors.csv, kind = temperature",
+      "doc": "47",
+      "note": "a second validation target that this work did not use until the entrainment question arose; it measures entrainment more directly than concentration does"
+    },
+    {
+      "key": "flacs.test6_30m",
+      "value": "21 measured, 22-23 FLACS, 6.6 here",
+      "unit": "vol %",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "Hansen & Hansen, PSEP 174 (2023) 376-390, table 3",
+      "doc": "45",
+      "note": "**FLACS predicts the near field far better.** It uses a pseudo-source -- 37 % H2 and 63 % air by mass at 25 K and 70 m/s, pseudo-diameter 0.11 m against the real 25.4 mm nozzle -- and the 70 m/s is selected, not derived"
+    },
+    {
+      "key": "flacs.test5_30m",
+      "value": "7.6 measured, ~7 FLACS, 6.95 here",
+      "unit": "vol %",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "as above",
+      "doc": "45",
+      "note": "all three agree at 30 m on test 5"
+    },
+    {
+      "key": "flacs.test5_100m",
+      "value": "1.5 measured, 2.0 FLACS, 0.11 here",
+      "unit": "vol %",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "as above",
+      "doc": "45",
+      "note": "**the worst cell.** The downward release is substituted by a horizontal jet here (docs/18) and that holds at 30 m but not at 100"
+    },
+    {
+      "key": "flacs.liftoff_agrees",
+      "value": true,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "tests 5 and 6",
+      "doc": "45",
+      "note": "all three place test 6 as lifted and test 5 as grounded"
+    },
+    {
+      "key": "flacs.50m_missed_by_all",
+      "value": true,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "test 6, 50 m arc",
+      "doc": "45",
+      "note": "measured 2 %, FLACS 8 %, this work 0.63 %. Hansen & Hansen attribute it to a diagonal wind pushing the plume off the centreline -- a property of the measurement, not of any model"
+    },
+    {
+      "key": "humidity.hansen_used_90pct",
+      "value": 90.0,
+      "unit": "%",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "Hansen & Hansen 2023, table 2",
+      "doc": "45",
+      "note": "**FFI never reported it and this work assumes 75 %.** The difference alone moves the 30 m concentration by 16 %, which is why the distance to the flammable limit is the endpoint here"
+    },
+    {
+      "key": "crossmodel.test4_liftoff_agrees",
+      "value": true,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "Mack & Boot ICHS 2023 against scripts/cross_model.py",
+      "doc": "44",
+      "note": "EFFECTS report no lift-off at any wind speed; Briggs L_p here is 3.8, grounded"
+    },
+    {
+      "key": "crossmodel.test6_liftoff_agrees",
+      "value": true,
+      "unit": "-",
+      "grade": "B",
+      "kind": "comparison",
+      "source": "as above",
+      "doc": "44",
+      "note": "EFFECTS report the 100 m sensor does not detect, a lifted plume; L_p here is 28.9, the only one of the six FFI trials above threshold"
+    },
+    {
+      "key": "crossmodel.near_field_ratio",
+      "value": "0.37 to 0.39",
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "30 m arc maxima, tests 4 and 6",
+      "doc": "44",
+      "note": "**Mack & Boot report the same signature on the same two trials** -- 'maximum values close to release are underpredicted' -- and attribute it to the integral and RANS classes rather than to EFFECTS"
+    },
+    {
+      "key": "crossmodel.far_field_ratio",
+      "value": "0.80 to 1.03",
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "50 and 100 m arc maxima",
+      "doc": "44",
+      "note": ""
+    },
+    {
+      "key": "crossmodel.MG",
+      "value": 1.57,
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "six arc maxima, tests 4 and 6, RH 75 % assumed",
+      "doc": "44",
+      "note": "MG above 1 is under-prediction. **Computed on an assumed humidity** that FFI never reported; reported for comparison with the literature, not as a basis for any claim"
+    },
+    {
+      "key": "comparison.not_possible",
+      "value": "different targets, rates, gaps",
+      "unit": "-",
+      "grade": "-",
+      "kind": "diagnostic",
+      "source": "docs/36 section 36.3",
+      "doc": "36",
+      "note": "concentrations vs LFL distance, 0.07 to 10.3 kg/s, and each dataset missing a different input; a single performance table would be false"
+    },
+    {
+      "key": "slabx.buoyant_branch_exists",
+      "value": true,
+      "unit": "-",
+      "grade": "A",
+      "kind": "measurement",
+      "source": "core/plume.py is_lofted, EQ 6a branch",
+      "doc": "38",
+      "note": "**the branch is there.** The problem is that the rise is unbounded, not that it is absent; a feature table marking it as missing repeats error 9 of section C7a"
+    },
+    {
+      "key": "slabx.flash_is_an_input",
+      "value": true,
+      "unit": "-",
+      "grade": "A",
+      "kind": "measurement",
+      "source": "core/source.py line 420",
+      "doc": "38",
+      "note": "liquid_fraction is supplied, not solved; this work computes it externally with a CoolProp isenthalpic flash"
+    },
+    {
+      "key": "degadis.core_is_momentumless",
+      "value": true,
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "EPA Science Inventory record for DEGADIS",
+      "doc": "39",
+      "note": "ground-level low-momentum area sources, negatively and neutrally buoyant; jets come from a separate Ooms/JETPLUME front end"
+    },
+    {
+      "key": "degadis.aerosol_density_is_user_supplied",
+      "value": true,
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "EPA record",
+      "doc": "39",
+      "note": "the model does not characterise the density of aerosol releases"
+    },
+    {
+      "key": "degadis.regulatory_designation",
+      "value": "49 CFR 193.2059",
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "GTI distribution note",
+      "doc": "39",
+      "note": "confirms error 6 of section C7a: this work once wrote that SLAB is the regulatory model, and DEGADIS is"
+    },
+    {
+      "key": "hgsystem.aeroplume_does_buoyant_jets",
+      "value": true,
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "HGSYSTEM AEROPLUME user guide",
+      "doc": "39",
+      "note": "dense, neutral and buoyant jets at arbitrary release angle; the technical manual adds plume rise, fall and touchdown"
+    },
+    {
+      "key": "hgsystem.has_liftoff",
+      "value": true,
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "Witlox HGSYSTEM/UF6 enhancements",
+      "doc": "39",
+      "note": "buoyant plume lift-off against wind tunnel data; **so lift-off is not novel**"
+    },
+    {
+      "key": "comparison.buoyant_rise_is_common",
+      "value": true,
+      "unit": "-",
+      "grade": "-",
+      "kind": "diagnostic",
+      "source": "six models surveyed",
+      "doc": "39",
+      "note": "only the DEGADIS core and the HEGADAS module lack it, and both get it from a front-end model. Adding buoyant rise is not the contribution; knowing when it may not be used is"
+    },
+    {
+      "key": "comparison.phast_udm",
+      "value": "unverified",
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "commercial; manual not obtained",
+      "doc": "39",
+      "note": "its FFI predictions are in DNV GL 853182, which is not public"
+    },
+    {
+      "key": "effects.validation_outside_premise",
+      "value": "3 of 6",
+      "unit": "-",
+      "grade": "A",
+      "kind": "diagnostic",
+      "source": "EFFECTS Table 2 conditions, run through premise_summary",
+      "doc": "35",
+      "note": "max w_c/u of 4.90, 2.93 and 1.76 on tests 2, 6 and 4"
+    },
+    {
+      "key": "effects.vertical_lfl_error.outside",
+      "value": "-26 and -28 %",
+      "unit": "-",
+      "grade": "C",
+      "kind": "comparison",
+      "source": "EFFECTS Table 3, tests 6 and 4",
+      "doc": "35",
+      "note": "against 0 and -15 % on the two inside; n = 4, a direction not a correlation"
+    },
+    {
+      "key": "nasa.pool_radius.second_hand",
+      "value": "2 to 3",
+      "unit": "m",
+      "grade": "C",
+      "kind": "measurement",
+      "source": "EFFECTS, citing observation",
+      "doc": "35",
+      "note": "**the original does not report it**; the plume-width result depends on which is used and this one was found after seeing the failure"
+    },
+    {
+      "key": "rise.P_W1.source_term_sensitivity",
+      "value": "FAIL to PASS",
+      "unit": "-",
+      "grade": "-",
+      "kind": "diagnostic",
+      "source": "NASA Test 6, pond 4.55 m vs pool 3 m",
+      "doc": "35",
+      "note": "n goes 1.068 to 0.877; **not recorded as a pass**, because the input that decides it is not in the first-hand record"
+    },
+    {
+      "key": "provenance.bam.rate",
+      "value": "three sources, three values",
+      "unit": "-",
+      "grade": "-",
+      "kind": "measurement",
+      "source": "0.4, 0.37 and 0.8 kg/s",
+      "doc": "docs/README",
+      "note": "unusable"
+    }
+  ],
+  "note": "22 records were removed from the public release: values measured by others and reported in their publications. See data/SOURCES.md. Model outputs, internal comparisons, diagnostics and withdrawn values are all retained."
+}
