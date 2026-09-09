@@ -11,7 +11,7 @@ pip install slabx-lh2
 For an evidence-qualified LH2 pool source term, install the optional adapter:
 
 ```bash
-pip install "slabx-lh2[pool]"
+pip install "lh2poolx @ git+https://github.com/lyullee/lh2poolx.git"
 ```
 
 ---
