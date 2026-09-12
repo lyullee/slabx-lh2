@@ -57,11 +57,12 @@ pre-lift-off vertical drag, rise-dependent entrainment, added mass, and an
 impinging-jet source. See `docs/24_LH2_SUMMARY.md`.
 """
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 from . import (depth_cap, diagnostics, lfl, lh2pool, plume_width, pool,  # noqa: F401
                vertical_drag,
                water_ice)
+from .source_ledger import SourceLedger, SourceState
 
 __all__ = ["diagnostics", "lfl", "lh2pool", "plume_width", "pool", "vertical_drag",
-           "water_ice", "__version__"]
+           "water_ice", "SourceLedger", "SourceState", "__version__"]

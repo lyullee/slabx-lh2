@@ -313,3 +313,13 @@ See `CITATION.cff`. Please cite the SLAB model as well:
 > Ermak, D.L. (1990). *User's Manual for SLAB: an atmospheric dispersion model
 > for denser-than-air releases.* UCRL-MA-105607, Lawrence Livermore National
 > Laboratory.
+
+## Source-ledger handoff
+
+Version 0.1.5 adds `slabx_lh2.SourceLedger` and `SourceState`. A ledger stores
+the resolved source-plane rate, composition, temperature, density, area,
+height, direction, and physical stage in a JSON-safe form. The schema is
+model-neutral and can be consumed by DEGADISx through its own route adapter;
+the two dispersion models do not silently share source assumptions. The SLAB
+pool adapter rejects unresolved liquid accumulation instead of inventing a
+pool history.

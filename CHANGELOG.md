@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.5 — 2026-09-12
+
+- Add validated, JSON-serialisable `SourceLedger`/`SourceState` input handoff.
+- Reject unresolved liquid accumulation in the ledger-to-pool adapter.
+
 ## 0.1.3 — unreleased candidate
 
 ### Additional verification on 2026-08-29
