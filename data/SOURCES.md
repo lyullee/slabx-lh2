@@ -27,11 +27,18 @@ Nothing below is secret. Four of the five sets are free, and
 |---|---|
 | report | Aaneby, Gjesdal & Voie (2020), *Large scale leakage of liquid hydrogen*, FFI-RAPPORT 20/03101 |
 | access | public PDF, FFI (Norwegian Defence Research Establishment) |
+| publisher page | https://www.ffi.no/en/publications-archive/large-scale-leakage-of-liquid-hydrogen-lh2-tests-related-to-bunkering-and-maritime-use-of-liquid-hydrogen |
+| audited PDF SHA-256 | `d500b61da23a44043648d71e06ee7d061e7b46671af5ecc8fc370cf9c9a23a4a` |
 | extract | `python scripts/extract/parse_ffi.py <report.pdf>` |
 | gives | `lh2_ffi_sensors.csv` (826 rows), `lh2_ffi_conditions.csv` (7) |
 
 Appendix A carries per-sensor maxima and means on the 30, 50 and 100 m arcs at
 0, 0.1, 1.0 and 1.8 m height.
+
+The frozen seven-test research model uses 210 selected sensor-test records.
+Its aggregate and per-test metrics, species-clock correction, and publication
+scope are recorded in `docs/61_FFI_7_TEST_RESEARCH_MODEL.md`. The report and
+derived measurement tables are not included in this repository.
 
 **Humidity is not in this report.** It was measured by DNV and appears in
 DNV GL 853182 Rev.2, which is not public. Every FFI run here therefore states

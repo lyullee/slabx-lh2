@@ -51,18 +51,25 @@ What is here, and what each thing rests on:
                   1.25 factor makes all six FFI trials conservative; the
                   un-factored bracket count is humidity-dependent.
 
+    physical_transition
+                  a resolved, pre-diluted LH2 cloud handoff. Mixture flux is
+                  preserved while emitted H2 and entrained carrier inventory
+                  remain separate for the finite-release plume-to-puff clock.
+
 What is **not** here, and why, is as much of the result: multiple hypotheses
 were pre-registered and rejected, including ground reflection, cloud depth,
 pre-lift-off vertical drag, rise-dependent entrainment, added mass, and an
 impinging-jet source. See `docs/24_LH2_SUMMARY.md`.
 """
 
-__version__ = "0.1.5"
+__version__ = "0.2.0"
 
 from . import (depth_cap, diagnostics, lfl, lh2pool, plume_width, pool,  # noqa: F401
                vertical_drag,
                water_ice)
 from .source_ledger import SourceLedger, SourceState
+from .physical_transition import PhysicalTransitionCloud
 
 __all__ = ["diagnostics", "lfl", "lh2pool", "plume_width", "pool", "vertical_drag",
-           "water_ice", "SourceLedger", "SourceState", "__version__"]
+           "water_ice", "SourceLedger", "SourceState", "PhysicalTransitionCloud",
+           "__version__"]

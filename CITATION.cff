@@ -10,19 +10,19 @@ authors:
     affiliation: Korea Gas Safety Corporation
 repository-code: "https://github.com/lyullee/slabx-lh2"
 license: MIT
-version: 0.1.5
+version: 0.2.0
 identifiers:
   - type: doi
     value: 10.5281/zenodo.22075011
     description: Concept DOI for all slabx-lh2 releases
 abstract: >-
-  Liquid hydrogen extensions to the SLAB dense-gas dispersion model, with a
-  criterion that says when the downwind-marching formulation may be used. Two
-  corrections carry no fitted coefficients: compatibility handling for water
-  saturation below the triple point in slabx before 1.0.6, and
-  a partial coupling of the cloud width to its rise. The applicability
-  diagnostic reports whether a completed run remains within the
-  downwind-marching premise.
+  Liquid-hydrogen source, thermodynamic and diagnostic extensions to the SLABx
+  dense-gas dispersion model. The package includes an explicit resolved-cloud
+  handoff that conserves mixture flux while keeping emitted H2 and entrained
+  carrier inventories separate for finite-release plume-to-puff transitions.
+  A frozen seven-test FFI research evaluation reports concentration and safety
+  threshold performance without sensor fitting, residual correction or hull
+  assimilation, while retaining unresolved field-structure limitations.
 references:
   - type: report
     authors:

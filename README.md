@@ -4,6 +4,15 @@ Liquid hydrogen extensions to the [SLAB](https://github.com/lyullee/slabx)
 dense-gas dispersion model, and a criterion that says **when the model may be
 used at all**.
 
+The current paper model is a seven-test, 210-record FFI research configuration.
+It combines LH2-specific source physics with the material-independent SLABx
+plume/puff core. The frozen result is MAE **0.086463 vol%**, nominal 0.5LEL
+classification **209/210** (210/210 at the report's display precision), and LFL
+classification **210/210**, without sensor fitting, residual correction, or
+sensor-hull assimilation. See
+[`docs/61_FFI_7_TEST_RESEARCH_MODEL.md`](docs/61_FFI_7_TEST_RESEARCH_MODEL.md)
+for the architecture, evidence, and remaining limits.
+
 ```bash
 pip install slabx-lh2
 ```
@@ -27,9 +36,9 @@ runtime figures are host- and load-specific and are not a comparison with
 other codes.
 
 But an integral model that answers outside its own premises is worse than no
-answer, because the number looks the same either way. So this package does two
-things: it fixes what LH2 breaks, and it tells you when to stop trusting the
-result.
+answer, because the number looks the same either way. So this package resolves
+the LH2-specific source handoff, carries the cryogenic extensions, and tells
+you when to stop trusting the result.
 
 ---
 
@@ -141,12 +150,17 @@ against 67 ms warm, about 22 times slower.
 | `lfl` | distance to 4 vol%, which is what a separation distance is set from |
 | `air_condensation` | measured, and shown not to matter: onset is above the UFL |
 | `vertical_drag` | **exploratory, not adopted.** Mack & Boot's form drag |
+| `physical_transition` | resolved, pre-diluted LH2 handoff with separate H2 and carrier inventories |
 | `trials` | conditions for 35 trials; the measurements are not distributed |
 
 No coefficient was fitted to the six FFI LFL distances. The legacy
 `critical_wind` warning does contain coefficients fitted to the frozen model's
 own `max(w_c/u) = 1` boundary for one reference pool; this is why it is not used
 as a physical correlation or an authoritative gate.
+
+That six-test LFL-bracket result is retained for historical reproducibility.
+It is separate from the newer seven-test, 210-record concentration evaluation
+used for the planned paper.
 
 `lh2poolx` is deliberately upstream of SLAB. It supplies a declared
 quasi-steady, unconfined pool area and evaporation rate from flash, an explicit
@@ -323,3 +337,9 @@ model-neutral and can be consumed by DEGADISx through its own route adapter;
 the two dispersion models do not silently share source assumptions. The SLAB
 pool adapter rejects unresolved liquid accumulation instead of inventing a
 pool history.
+
+Version 0.2.0 adds `PhysicalTransitionCloud` for an LH2 source that has already
+entrained air before the handoff. Mixture flux, composition, temperature and
+geometry are preserved, while the finite-release clock uses H2 mass. The
+H2+air carrier inventory is available separately, preventing an unlike-mass
+comparison from delaying or suppressing the plume-to-puff transition.

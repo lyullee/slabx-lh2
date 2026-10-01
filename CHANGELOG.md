@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0 — 2026-10-01
+
+- Add `PhysicalTransitionCloud`, a resolved LH2 jet-to-cloud handoff that
+  preserves mixture flux, composition, temperature and geometry.
+- Make the plume-to-puff clock use emitted H2 inventory and expose entrained
+  H2+air carrier inventory separately.
+- Document the frozen seven-test, 210-record FFI research evaluation and the
+  boundary between the generic SLABx core and LH2-specific physics.
+- Record the report URL and SHA-256 used for the private extraction workflow;
+  the third-party report and measurements remain outside the package.
+
 ## 0.1.5 — 2026-09-12
 
 - Add validated, JSON-serialisable `SourceLedger`/`SourceState` input handoff.
