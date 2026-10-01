@@ -1,5 +1,8 @@
 # slabx-lh2
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22075011.svg)](https://doi.org/10.5281/zenodo.22075011)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Liquid hydrogen extensions to the [SLAB](https://github.com/lyullee/slabx)
 dense-gas dispersion model, and a criterion that says **when the model may be
 used at all**.
@@ -322,7 +325,14 @@ MIT for the code. The experimental data is not redistributed; see
 
 ## Citation
 
-See `CITATION.cff`. Please cite the SLAB model as well:
+For the research model documented here, cite the archived **slabx-lh2 0.2.0**
+release: [10.5281/zenodo.23084445](https://doi.org/10.5281/zenodo.23084445).
+The concept DOI for all versions is
+[10.5281/zenodo.22075011](https://doi.org/10.5281/zenodo.22075011).
+The corresponding material-independent core release is **slabx 1.0.8**,
+[10.5281/zenodo.23084448](https://doi.org/10.5281/zenodo.23084448).
+`CITATION.cff` keeps the concept DOI so it always resolves to the latest
+release. Please cite the SLAB model as well:
 
 > Ermak, D.L. (1990). *User's Manual for SLAB: an atmospheric dispersion model
 > for denser-than-air releases.* UCRL-MA-105607, Lawrence Livermore National

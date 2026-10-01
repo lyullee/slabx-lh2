@@ -2,6 +2,8 @@
 
 ## 0.2.0 — 2026-10-01
 
+Version DOI: [10.5281/zenodo.23084445](https://doi.org/10.5281/zenodo.23084445)
+
 - Add `PhysicalTransitionCloud`, a resolved LH2 jet-to-cloud handoff that
   preserves mixture flux, composition, temperature and geometry.
 - Make the plume-to-puff clock use emitted H2 inventory and expose entrained

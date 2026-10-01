@@ -4,6 +4,11 @@ Status: frozen research configuration, 2026-10-01.  This record describes the
 model used for the planned paper.  It is not a production qualification or a
 claim of whole-field conformance.
 
+Archived software release: **slabx-lh2 0.2.0**,
+[10.5281/zenodo.23084445](https://doi.org/10.5281/zenodo.23084445).
+Generic core release: **slabx 1.0.8**,
+[10.5281/zenodo.23084448](https://doi.org/10.5281/zenodo.23084448).
+
 ## Model architecture
 
 The calculation is a chain of explicit physical responsibilities:
