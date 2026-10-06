@@ -15,8 +15,9 @@ The calculation is a chain of explicit physical responsibilities:
 
 1. an LH2 source route resolves flashing, phase state, jet or impact behaviour,
    and any pool contribution;
-2. a source ledger records rate, composition, temperature, density, geometry,
-   direction and physical stage at a selected handoff plane;
+2. where the resolved-source route is used, a source ledger records rate,
+   composition, temperature, density, geometry, direction and physical stage
+   at a selected handoff plane;
 3. `PhysicalTransitionCloud` converts a pre-diluted resolved state into the
    generic SLABx `SourceModel` contract;
 4. SLABx integrates mass, species, momentum and energy in plume mode and, for
@@ -76,17 +77,21 @@ is reported separately and is not used to replace the nominal result.
 
 ## Physical result from the model
 
-With the corrected species clock, the five-second Test 4 releases change from
-plume to puff at 30.8148--32.9902 m over 72 reconstructed paths; the median is
-31.8257 m. Supported 30 m sensor rows are pre-transition, while supported 50 m
-and 100 m rows are post-transition. Native puff dynamics give a post-transition
-scalar concentration with a median puff/plume ratio of 0.842 and a range of
-0.611--0.995 in the audited cases.
+With the corrected species clock, applying the native finite-source relation
+to each *isolated* five-second Test 4 cohort gives a plume-to-puff transition
+distance of 30.8148--32.9902 m over 72 reconstructed paths (median
+31.8257 m). In this diagnostic, individual-cohort states at 30 m precede the
+calculated transition and states at 50 and 100 m follow it. Native puff
+dynamics give a post-transition scalar concentration with a median puff/plume
+ratio of 0.842 and a range of 0.611--0.995 in the audited isolated cases.
+The range depends on the chosen cohort duration: the 30/50 m ordering persists
+for 5--10 s cohorts but not for every tested duration.
 
-This establishes that the three sensor radii do not all observe the same
-dispersion regime. A live vector-weather puff implementation remains a follow-
-up task; a dose-preserving arrival-duration remap alone did not improve the
-error.
+The 360 s release contains overlapping cohorts. This diagnostic does not
+establish an observed transition boundary, or validate a coupled puff solution,
+for that complete cloud. A live vector-weather puff implementation remains a
+follow-up task; a dose-preserving arrival-duration remap alone did not improve
+the error.
 
 ## Interpretation and limits
 
@@ -95,6 +100,20 @@ questions. Test 4 and Test 6 retain geometry-organised continuous-field
 residuals even though LFL classification is 210/210. The research result
 supports rapid safety-region screening within the tested configuration, while
 the remaining residual structure prevents a production-default claim.
+
+Six tests used ten bearings on 30, 50 and 100 m arcs. Test 2 is different:
+it used eight bearing positions on the 30 m arc and two near-source positions
+at 9.010 and 11.043 m, each measured at three heights. The seven tests still
+provide 30 records each, but Test 2 must not be described as a three-arc
+layout. Test 2 used a separate meteorology-conditioned direction envelope;
+its field route did not use the resolved-source `SourceLedger` handoff.
+
+The saved Test 6 screen covered 677 eligible artifact folders, but these
+contained only 29 distinct complete 30-receptor prediction vectors. All 476
+folders satisfying the aggregate-error and threshold gates reproduced the
+retained vector exactly. They are repeated outputs, not 476 independent model
+improvements or failed independent coefficient trials. No distinct saved
+alternative passed the joint gate.
 
 Time-resolved wind direction can establish whether a receptor direction has
 support. It does not, by itself, determine concentration, residence time or
@@ -114,6 +133,11 @@ The public repository provides the reusable source contract, unit tests,
 source provenance, and extraction instructions. Rebuilding the measurement
 comparison requires the FFI report obtained from its publisher and the private
 research workflow that produced the frozen audit.
+
+The archived software DOI above identifies the public 0.2.0 code release,
+not a frozen archive of the private 210-record research workflow. A paper
+reproducibility deposit still needs the permissible derived data, exact inputs,
+scripts, manifests and output hashes.
 
 ## Relationship to the earlier six-test result
 

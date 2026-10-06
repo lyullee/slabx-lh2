@@ -20,6 +20,11 @@ for the architecture, evidence, and remaining limits.
 pip install slabx-lh2
 ```
 
+As of 2026-10-06, PyPI serves version 0.1.5; the archived 0.2.0 source release
+is available from this repository and its version DOI. The seven-test paper
+configuration also requires a separate research workflow and FFI-derived
+inputs, so a package installation alone does not reproduce its 210 records.
+
 For an evidence-qualified LH2 pool source term, install the optional adapter:
 
 ```bash
