@@ -135,9 +135,11 @@ comparison requires the FFI report obtained from its publisher and the private
 research workflow that produced the frozen audit.
 
 The archived software DOI above identifies the public 0.2.0 code release,
-not a frozen archive of the private 210-record research workflow. A paper
-reproducibility deposit still needs the permissible derived data, exact inputs,
-scripts, manifests and output hashes.
+not the 210-record research workflow. The exact scripts, inputs, selected
+outputs and audits are now fixed in a private capsule; a public release of
+measurement-derived files remains subject to rights review. The capsule's
+content hash and access boundary are
+documented in [`62_PSEP_REPRODUCIBILITY_ACCESS.md`](62_PSEP_REPRODUCIBILITY_ACCESS.md).
 
 ## Relationship to the earlier six-test result
 
